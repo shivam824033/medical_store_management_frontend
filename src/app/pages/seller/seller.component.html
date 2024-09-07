@@ -1,1 +1,125 @@
-<p class="container mt-5">seller works! heelo</p>
+<div class="container my-2">
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                role="tab" aria-controls="home" aria-selected="true">Add Product</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+                role="tab" aria-controls="profile" aria-selected="false">Sell Product</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button"
+                role="tab" aria-controls="contact" aria-selected="false">Search Product</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="container">
+                <div class="row">
+                    <div class="col-auto addProduct">
+                        <form #productForm="ngForm" (ngSubmit)="addProduct(productForm)" novalidate>
+
+                            <div>
+                                <label for="batchNumber">Batch Number : </label>
+                                <input type="text" id="batchNumber" name="batchNumber" ngModel required />
+                            </div>
+
+                            <div>
+                                <label for="productName">Product Name : </label>
+                                <input type="text" id="productName" name="productName" ngModel required />
+                            </div>
+
+                            <div>
+                                <label for="productDescription">Product Description :</label>
+                                <textarea id="productDescription" name="productDescription" ngModel required></textarea>
+                            </div>
+
+                            <div>
+                                <label for="productCategory">Product Category</label>
+                                <select id="productCategory" name="productCategory" ngModel required>
+                                    <option value="" disabled selected>Select a category</option>
+                                    <option *ngFor="let category of categories" [value]="category">{{ category }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="productPrice">Product Price</label>
+                                <input type="number" id="productPrice" name="productPrice" ngModel required />
+                            </div>
+
+                            <div>
+                                <label for="productQuantity">Product Quantity</label>
+                                <input type="number" id="productQuantity" name="productQuantity" ngModel required />
+                            </div>
+
+                            <div>
+                                <label for="productExpiryDate">Product Expiry Date</label>
+                                <input type="date" id="productExpiryDate" name="productExpiryDate" ngModel required />
+                            </div>
+
+                            <button type="submit" [disabled]="!productForm.valid">Add Product</button>
+                        </form>
+                    </div>
+                    <div class="col-auto viewProduct">
+
+                        <!-- <ul  *ngFor="let product of productList; index as i">
+                                <li>
+                                    {{product.batchNumber}}
+                                </li>
+                                <li>
+                                     {{product.productName}}
+                                </li>
+                                <li>
+                                    {{product.productDescription}}
+                               </li>
+                               <li>
+                                {{product.productExpiryDate}}
+                           </li>
+                            </ul> -->
+
+                        <table class="table table-hover table-dark">
+                            <thead>
+                                <tr>
+
+
+                                    <th scope="col">Batch Number</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Expiry date</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let product of productList">
+
+                                    <td>{{product.batchNumber}}</td>
+                                    <td>{{product.productName}}</td>
+                                    <td>{{product.productExpiryDate}}</td>
+                                    <td>{{product.productQuantity}}</td>
+                                    <td>{{product.productPrice}}</td>
+                                    <td><button>Delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">profile</div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">contact</div>
+
+
+    </div>
+
+</div>

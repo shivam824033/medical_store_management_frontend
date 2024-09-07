@@ -48,7 +48,11 @@
                     <div class="col">
                         <div>
                             <label for="roles">Roles <span style="color: red;">*</span></label>
-                            <input id="roles" class="form-control" formControlName="roles" type="text" />
+                            <!-- <input id="roles" class="form-control" formControlName="roles" type="text" /> -->
+                            <select id="department" class="form-control" formControlName="roles">
+                                <option value="" disabled>Select</option>
+                                <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+                              </select>
                             <div class="error"
                                 *ngIf="signupForm.get('roles')?.invalid && signupForm.get('roles')?.touched">
                                 Role is required.

@@ -16,6 +16,7 @@ export class SignupComponent implements OnInit {
   }
   loginRes = new LoginResponse();
   signupForm: FormGroup;
+  roles = ["SELLER", "PUBLIC"];
 
   errorMessage:any;
 
@@ -41,7 +42,7 @@ export class SignupComponent implements OnInit {
   // }
 
   onSubmit() {
-    console.log('Client Details:', this.signupForm.value);
+    console.log('registration Details:', this.signupForm.value);
     this.signUpService.signUp(this.signupForm.value).subscribe(data => {
 
       Object.assign(this.loginRes, data);

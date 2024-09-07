@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../models/login';
+import { ProductDetails } from '../models/product-details';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,7 +20,7 @@ export class GlobalService {
   constructor(private http:HttpClient) { }
 
   login(loginRequest: Login){
-    return this.http.post(`${this.baseUrl}/api/auth/login`, loginRequest)
+    return this.http.post(`${this.baseUrl}/api/auth/login`, loginRequest);
   }
 
   logoutSession(){
@@ -35,11 +36,15 @@ export class GlobalService {
   }
 
   signUp(signupRequest: any){
-    return this.http.post(`${this.baseUrl}/api/auth/signUp`, signupRequest)
+    return this.http.post(`${this.baseUrl}/api/auth/signUp`, signupRequest);
   }
 
   generateKey(){
-    return this.http.get(`${this.baseUrl}/api/owner/generatekey`)
+    return this.http.get(`${this.baseUrl}/api/owner/generatekey`);
+  }
+
+  addProduct(product : ProductDetails){
+    return this.http.post(`${this.baseUrl}/api/seller/addProduct`, product);
   }
 
 }

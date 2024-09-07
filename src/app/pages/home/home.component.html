@@ -52,7 +52,7 @@
 </nav>
 
 <div class="home">
-    <div *ngIf="token==null && token==undefined && !loginFlag && !signUp">
+    <div *ngIf="token==null || token==undefined && !loginFlag && !signUp">
         <h1>token is not present</h1>
     </div>
     <div *ngIf="token!==null && token!==undefined">
