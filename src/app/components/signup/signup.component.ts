@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginResponse, SignUpRequest } from 'src/app/models/login';
 import { GlobalService } from 'src/app/services/global.service';
@@ -15,13 +15,13 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
   }
   loginRes = new LoginResponse();
-  signupForm: FormGroup;
+  signupForm: UntypedFormGroup;
   signUpRequest = new SignUpRequest();
   roles = ["SELLER", "PUBLIC"];
 
   errorMessage:any;
 
-  constructor(private fb: FormBuilder, private signUpService: GlobalService, private route: Router) {
+  constructor(private fb: UntypedFormBuilder, private signUpService: GlobalService, private route: Router) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],

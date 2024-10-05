@@ -104,5 +104,7 @@
       }
     }
   },
-  "defaultProject": "medical_store_management"
+  "cli": {
+    "analytics": false
+  }
 }

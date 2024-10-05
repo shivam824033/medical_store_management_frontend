@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ProductDetails } from 'src/app/models/product-details';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -13,7 +13,7 @@ export class SellerComponent implements OnInit {
  product = new ProductDetails();
  // productList= new Array<ProductDetails>;
  productList: ProductDetails[] = [];
-  constructor( private fb: FormBuilder,private sellerService: GlobalService) { }
+  constructor( private fb: UntypedFormBuilder,private sellerService: GlobalService) { }
 
   ngOnInit(): void {
   }
