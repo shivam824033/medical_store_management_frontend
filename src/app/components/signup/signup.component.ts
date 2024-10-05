@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginResponse } from 'src/app/models/login';
+import { LoginResponse, SignUpRequest } from 'src/app/models/login';
 import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
@@ -10,12 +10,13 @@ import { GlobalService } from 'src/app/services/global.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-
+  confirmPassword!:string;
 
   ngOnInit(): void {
   }
   loginRes = new LoginResponse();
   signupForm: FormGroup;
+  signUpRequest = new SignUpRequest();
   roles = ["SELLER", "PUBLIC"];
 
   errorMessage:any;
@@ -42,8 +43,10 @@ export class SignupComponent implements OnInit {
   // }
 
   onSubmit() {
-    console.log('registration Details:', this.signupForm.value);
-    this.signUpService.signUp(this.signupForm.value).subscribe(data => {
+    console.log('registration Details:', this.signUpRequest);
+    var fullName = this.signUpRequest.firstName + " " + this.signUpRequest.lastName;
+    this.signUpRequest.fullName=fullName;
+    this.signUpService.signUp(this.signUpRequest).subscribe(data => {
 
       Object.assign(this.loginRes, data);
 

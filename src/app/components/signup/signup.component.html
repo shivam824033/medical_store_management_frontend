@@ -1,4 +1,301 @@
+<!-- <input type="text" id="name" name="name" class="form-control"
+                required minlength="4" appForbiddenName="bob"
+                [(ngModel)]="username" #name="ngModel">
+
+          <div *ngIf="name.invalid && (name.dirty || name.touched)"
+              class="alert">
+            <div *ngIf="name.hasError('required')">
+              Name is required.
+            </div>
+            <div *ngIf="name.hasError('minlength')">
+              Name must be at least 4 characters long.
+            </div>
+            <div *ngIf="name.hasError('forbiddenName')">
+              Name cannot be Bob.
+            </div>
+          </div> -->
+
 <section class=" py-3 py-md-5 mt-2">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col">
+                <div class="card border border-light-subtle rounded-3 shadow-sm">
+                    <div class="card-body p-3 p-md-4 p-xl-5">
+                        <div class="text-center mb-3">
+                            <a href="/login">
+                                <img src="./assets/loginFromLogo.png" alt="BootstrapBrain Logo" width="175" height="57">
+                            </a>
+                        </div>
+                        <h4 class="text-center mb-4">Sign Up new account</h4>
+
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="username">Username <span style="color: red;">*</span></label>
+                                    <input id="username" class="form-control" type="text" required
+                                        [(ngModel)]="signUpRequest.username" #userName="ngModel" />
+
+                                    <div *ngIf="userName.invalid && (userName.dirty || userName.touched)">
+                                        <div class="error" *ngIf="userName.hasError('required')">
+                                            Username is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div>
+                                    <label for="email">Email <span style="color: red;">*</span></label>
+                                    <input id="email" class="form-control" type="email" required
+                                        [(ngModel)]="signUpRequest.email" #email="ngModel" />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                                        <div class="error" *ngIf="email.hasError('required')">
+                                            Valid email is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="firstname">First Name <span style="color: red;">*</span></label>
+                                    <input id="firstname" class="form-control" type="text" required
+                                        [(ngModel)]="signUpRequest.firstName" #firstname="ngModel" />
+
+                                    <div *ngIf="firstname.invalid && (firstname.dirty || firstname.touched)">
+                                        <div class="error" *ngIf="firstname.hasError('required')">
+                                            First Name is required.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div>
+                                    <label for="lastname">Last Name <span style="color: red;">*</span></label>
+                                    <input id="lastname" class="form-control" type="email" required
+                                        [(ngModel)]="signUpRequest.lastName" #lastname="ngModel" />
+
+                                    <div *ngIf="lastname.invalid && (lastname.dirty || lastname.touched)">
+                                        <div class="error" *ngIf="lastname.hasError('required')">
+                                            Last Name is required.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="gender">Gender<span style="color: red;">*</span></label>
+                                    <input id="gender" class="form-control" type="text" required
+                                        [(ngModel)]="signUpRequest.gender" #gender="ngModel" />
+
+                                    <div *ngIf="gender.invalid && (gender.dirty || gender.touched)">
+                                        <div class="error" *ngIf="gender.hasError('required')">
+                                            Gender is required.
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="role">Role<span style="color: red;">*</span></label>
+                                    <!-- <input id="roles" class="form-control" formControlName="roles" type="text" /> -->
+                                    <select id="role" class="form-select" [(ngModel)]="signUpRequest.roles" required
+                                        #role1="ngModel">
+                                        <option value="" disabled>Select</option>
+                                        <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+                                    </select>
+
+                                    <div *ngIf="role1.invalid && (role1.dirty || role1.touched)">
+                                        <div class="error" *ngIf="role1.hasError('required')">
+                                            Role is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="password">Password <span style="color: red;">*</span></label>
+                                    <input id="password" class="form-control" type="password" required minlength="6"
+                                        [(ngModel)]="signUpRequest.password" #password="ngModel" />
+
+                                    <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                                        <div class="error" *ngIf="password.hasError('required')">
+                                            Password is required.
+                                        </div>
+                                        <div class="error" *ngIf="password.hasError('minlength')">
+                                            Password is required (minimum 6 characters).
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="confirmpassword">Confirm Password <span
+                                            style="color: red;">*</span></label>
+                                    <input id="confirmpassword" class="form-control" type="password" required
+                                        minlength="6" [(ngModel)]="confirmPassword" #confirmPass="ngModel" />
+                                    <!-- <div class="error"
+                                *ngIf="password.hasError('required') || password.hasError('required')">
+                                Password is required (minimum 6 characters).
+                            </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="seller_section" *ngIf="signUpRequest.roles==='SELLER'">
+                            <div class="row">
+                                <div class="col">
+                                    <div>
+                                        <label for="storename">Store Name</label>
+                                        <input id="storename" class="form-control" type="text" required
+                                            [(ngModel)]="signUpRequest.storeName" #storename="ngModel" />
+
+                                        <div *ngIf="storename.invalid && (storename.dirty || storename.touched)">
+                                            <div class="error" *ngIf="storename.hasError('required')">
+                                                Store Name is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <label for="address">Address</label>
+                                        <textarea id="address" class="form-control" [(ngModel)]="signUpRequest.address1"
+                                            required #address="ngModel"></textarea>
+
+                                        <div *ngIf="address.invalid && (address.dirty || address.touched)">
+                                            <div class="error" *ngIf="address.hasError('required')">
+                                                Address is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="country">Country<span style="color: red;">*</span></label>
+                                        <select id="country" class="form-select" type="text" required
+                                            [(ngModel)]="signUpRequest.country" #country="ngModel">
+                                            <option value="">Select</option>
+                                            <option value="India">India</option>
+                                        </select>
+                                        <div *ngIf="country.invalid && (country.dirty || country.touched)">
+                                            <div class="error" *ngIf="country.hasError('required')">
+                                                Country is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="state">State<span style="color: red;">*</span></label>
+                                        <!-- <input id="roles" class="form-control" formControlName="roles" type="text" /> -->
+                                        <select id="state" class="form-select" [(ngModel)]="signUpRequest.state"
+                                            required #state="ngModel">
+                                            <option value="">Select</option>
+                                            <option value="Maharastra">Maharastra</option>
+
+                                        </select>
+
+                                        <div *ngIf="state.invalid && (state.dirty || state.touched)">
+                                            <div class="error" *ngIf="state.hasError('required')">
+                                                State is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="district">District<span style="color: red;">*</span></label>
+                                        <Select id="district" class="form-control" type="text" required="required"
+                                            [(ngModel)]="signUpRequest.district" #district="ngModel">
+                                            <option value="">Select</option>
+                                            <option value="Thane">Thane</option>
+                                        </Select>
+
+                                        <div *ngIf="district.invalid && (district.dirty || district.touched)">
+                                            <div class="error" *ngIf="district.hasError('required')">
+                                                District is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="pincode">Pincode<span style="color: red;">*</span></label>
+                                        <!-- <input id="roles" class="form-control" formControlName="roles" type="text" /> -->
+                                        <input type="number" id="pincode" class="form-control" required
+                                            [(ngModel)]="signUpRequest.pincode" #pincode="ngModel">
+
+                                        <div *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
+                                            <div class="error" *ngIf="pincode.hasError('required')">
+                                                Pincode is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div>
+                                        <label for="secretkey">Secret Key <span style="color: red;">*</span></label>
+                                        <input id="secretkey" class="form-control" type="password" required
+                                            [(ngModel)]="signUpRequest.secretKey" #secretKey="ngModel" />
+
+                                        <div *ngIf="secretKey.invalid && (secretKey.dirty || secretKey.touched)">
+                                            <div class="error" *ngIf="secretKey.hasError('required')">
+                                                Secret is required.
+                                            </div>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+
+                            <div class="col-5">
+                                <div class="d-grid my-3">
+                                    <button class="btn btn-primary btn-md" type="submit"
+                                        (click)="onSubmit()">Submit</button>
+                                </div>
+                                <!-- <button class="btn btn-primary" type="submit" >Submit</button> -->
+                            </div>
+                            <div class="col-7">
+                                <div class="row mt-2">
+                                    <p class="m-0 my-3 text-secondary text-end">Already have an account? <a
+                                            href="/login" class="link-primary text-decoration-none">Login here</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- <section class=" py-3 py-md-5 mt-2"></section>
 	<div class="container">
 	  <div class="row justify-content-center">
         <div class="col-6">
@@ -31,6 +328,7 @@
                                 *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
                                 Valid email is required.
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -48,7 +346,6 @@
                     <div class="col">
                         <div>
                             <label for="roles">Roles <span style="color: red;">*</span></label>
-                            <!-- <input id="roles" class="form-control" formControlName="roles" type="text" /> -->
                             <select id="department" class="form-control" formControlName="roles">
                                 <option value="" disabled>Select</option>
                                 <option *ngFor="let role of roles" [value]="role">{{role}}</option>
@@ -103,7 +400,6 @@
                         <div class="d-grid my-3">
                             <button class="btn btn-primary btn-md" type="submit" [disabled]="signupForm.invalid">Submit</button>
                           </div>
-                        <!-- <button class="btn btn-primary" type="submit" >Submit</button> -->
                     </div>
                     <div class="col-7">
                         <div class="row mt-2">
@@ -118,4 +414,4 @@
 		</div>
 	  </div>
 	</div>
-  </section>
+  </section> -->

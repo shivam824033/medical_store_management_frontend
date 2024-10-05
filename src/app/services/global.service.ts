@@ -1,7 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../models/login';
 import { ProductDetails } from '../models/product-details';
+import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -14,6 +16,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class GlobalService {
+
 
   baseUrl = "http://localhost:8080";
 
@@ -46,5 +49,21 @@ export class GlobalService {
   addProduct(product : ProductDetails){
     return this.http.post(`${this.baseUrl}/api/seller/addProduct`, product);
   }
+
+  searchSellerProduct(term: string) {
+		if (term === '') {
+			return of([]);
+		}
+
+    term = term.trim();
+
+    // Add safe, URL encoded search parameter if there is a search term
+    const options = term ?
+     { params: new HttpParams().set('name', term) } : {};
+
+		return this.http
+			.get<[any, string[]]>('', options)
+			.pipe(map((response) => response[1]));
+	}
 
 }

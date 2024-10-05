@@ -35,3 +35,28 @@ export class SecretKeyResponse {
 
     constructor(){}
 }
+
+export class SignUpRequest {
+    userId: number|undefined;
+
+    username: string | undefined;
+    email: string | undefined;
+	firstName: string | undefined;
+	lastName: string | undefined;
+	fullName: string | undefined;
+	gender: string | undefined;
+	roles: string | undefined;
+    password: string | undefined;	
+    storeId: number|undefined;
+
+	storeName: string | undefined;
+	address1: string | undefined;
+	address2: string | undefined;
+    pincode: number|undefined;
+    district: string | undefined;
+	state: string | undefined;
+	country: string | undefined;
+	secretKey: string | undefined;
+    accountStatus: string | undefined;
+    constructor(){}
+}
