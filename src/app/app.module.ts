@@ -13,6 +13,8 @@ import { PublicComponent } from './pages/public/public.component';
 import { SellerComponent } from './pages/seller/seller.component';
 import { GlobalInterceptor } from './services/global.interceptor';
 import { HeaderComponent } from './components/header/header.component';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { JsonPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { HeaderComponent } from './components/header/header.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JsonPipe,
+    NgbTypeaheadModule
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS, useClass: GlobalInterceptor,

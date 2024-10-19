@@ -4,9 +4,11 @@ export class ProductDetails {
     batchNumber!: string;
     productName!: string;
     productDescription!: string;
-    productCategory!: string;
-    productPrice!: Number;
-    productQuantity!: Number;
+    productCategory!: Number;
+    productImage!:string
+    productPerPrice!: Number;
+    productStripCount!: Number;
+    productPerStripCount!:Number;
     productExpiryDate!: Date;
     createdDate!: Date;
     updatedDate!: Date;
@@ -14,4 +16,18 @@ export class ProductDetails {
     userId!: Number;
 
     constructor(){}
+}
+
+export class MasterProductDetails {
+
+    productId!: Number;
+    productName!: string;
+    productDescription!: string;
+    productImage!:string;
+    productCategory!: Number;
+}
+
+export class Category {
+    name!:string;
+    value!:Number;
 }

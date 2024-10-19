@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../models/login';
 import { ProductDetails } from '../models/product-details';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 const httpOptions = {
@@ -20,50 +20,59 @@ export class GlobalService {
 
   baseUrl = "http://localhost:8080";
 
-  constructor(private http:HttpClient) { }
 
-  login(loginRequest: Login){
+  constructor(private http: HttpClient) { }
+
+  login(loginRequest: Login) {
     return this.http.post(`${this.baseUrl}/api/auth/login`, loginRequest);
   }
 
-  logoutSession(){
+  logoutSession() {
     console.log("home")
     const token = localStorage.getItem('token');
     const userDetails = localStorage.getItem('UserDetails');
-    if(token!==null && token!==undefined && userDetails!==null && userDetails!==undefined){
+    if (token !== null && token !== undefined && userDetails !== null && userDetails !== undefined) {
       localStorage.removeItem('token');
       localStorage.removeItem('UserDetails');
       return this.http.get(`${this.baseUrl}/api/auth/logout`);
     }
-    return ;
+    return;
   }
 
-  signUp(signupRequest: any){
+  signUp(signupRequest: any) {
     return this.http.post(`${this.baseUrl}/api/auth/signUp`, signupRequest);
   }
 
-  generateKey(){
+  generateKey() {
     return this.http.get(`${this.baseUrl}/api/owner/generatekey`);
   }
 
-  addProduct(product : ProductDetails){
+  addProduct(product: ProductDetails) {
     return this.http.post(`${this.baseUrl}/api/seller/addProduct`, product);
   }
 
   searchSellerProduct(term: string) {
-		if (term === '') {
-			return of([]);
-		}
-
+    if (term === '') {
+      return of([]);
+    }
     term = term.trim();
+    const PARAMS = new HttpParams({});
+    return this.http.get(`${this.baseUrl}/api/public/getMasterProduct`, {
+      params: PARAMS.set('keyword', term)
+    }).pipe(
+        map((response: any) => response['response']))   
+  }
 
-    // Add safe, URL encoded search parameter if there is a search term
-    const options = term ?
-     { params: new HttpParams().set('name', term) } : {};
-
-		return this.http
-			.get<[any, string[]]>('', options)
-			.pipe(map((response) => response[1]));
-	}
+  getSellerProduct(term: string) {
+    if (term === '') {
+      return of([]);
+    }
+    term = term.trim();
+    const PARAMS = new HttpParams({});
+    return this.http.get(`${this.baseUrl}/api/public/getSellerProduct`, {
+      params: PARAMS.set('keyword', term).set('storeId', 421302)
+    }).pipe(
+        map((response: any) => response['response']))   
+  }
 
 }
