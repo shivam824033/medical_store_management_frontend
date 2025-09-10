@@ -11,32 +11,39 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class SellerComponent implements OnInit {
 
+  successMessage ="";
+  errorMessage = "";
   searchShow = false;
+  addAnotherbtn = false;
   categories2 = [
     {
-     "id": "1",
-     "name": "Tablet"
+      "id": "1",
+      "name": "Tablet"
     },
     {
-     "id": "2",
-     "name": "Capsule"
+      "id": "2",
+      "name": "Capsule"
+    },
+    {
+      "id": "3",
+      "name": "Cream"
     }
   ];
 
-  onClick(data: any){
+  onClick(data: any) {
     console.log("on click", this.categories2)
   }
- product = new ProductDetails();
- productSearchResult = new ProductDetails();
- // productList= new Array<ProductDetails>;
- productList: ProductDetails[] = [];
- categories: Category[]=[];
-  constructor(private sellerService: GlobalService) { 
-this.searchShow =false;
-//     var cat = new Category();
-//     cat.name = "Tablet";
-//     cat.value = 1;
-// this.categories.push(cat)
+  product = new ProductDetails();
+  productSearchResult = new ProductDetails();
+  // productList= new Array<ProductDetails>;
+  productList: ProductDetails[] = [];
+  categories: Category[] = [];
+  constructor(private sellerService: GlobalService) {
+    this.searchShow = false;
+    //     var cat = new Category();
+    //     cat.name = "Tablet";
+    //     cat.value = 1;
+    // this.categories.push(cat)
     console.log(this.categories2)
   }
 
@@ -44,58 +51,91 @@ this.searchShow =false;
 
   }
 
- 
+
 
   addProduct(form: any) {
-    if (this.product!==null) {
+    this.errorMessage = "";
+    this.successMessage = "";
+    if (this.product !== null) {
       // const newProduct = form.value;
       // Object.assign(this.product, newProduct);
       console.log('Product added successfully:', this.product);
       this.productList.push(this.product);
 
-if(this.product.batchNumber!==null){
-  this.sellerService.addProduct(this.product).subscribe((data: any)=>{
-    
-    console.log('Product added successfully:', data);
+      if (this.product.batchNumber !== null) {
+        this.sellerService.addProduct(this.product).subscribe((data: any) => {
 
-  })
-}
+          if (data.errorMessage != null) {
+            this.errorMessage = data.errorMessage;
+          } else{
+            this.successMessage = data.response;
+            this.addAnotherbtn = true;
+          }
+
+        })
+      }
 
       // Add logic to send the product to the backend or store it
       // alert('Product added successfully!');
       //form.reset();
     }
   }
-	searching = false;
-	searchFailed = false;
+
+  addAnotherProduct() {
+    this.product = new ProductDetails();
+    this.errorMessage = "";
+    this.successMessage = "";
+    this.addAnotherbtn = false;
+  }
+
+  searching = false;
+  searchFailed = false;
   model: any;
   masterProduct!: MasterProductDetails;
 
-  formatter = (x: { productName:string}) => x.productName;
+//  formatter = (x: { BproductName: string, AexpiryDate: string }) => (x.BproductName, x.AexpiryDate);
+    formatter = (x: { productName: string}) => (x.productName);
+
   searchProduct: OperatorFunction<string, any> = (text$: Observable<string>) =>
-		text$.pipe(
-			debounceTime(300),
-			distinctUntilChanged(),
-			tap(() => (this.searching = true)),
-			switchMap((term) =>
-				this.sellerService.getSellerProduct(term).pipe(
-					tap((res) => {this.searchFailed = false}),
-					catchError(() => {
-						this.searchFailed = true;
-						return of([]);
-					})),
-			),
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) =>
+        this.sellerService.getSellerProduct(term).pipe(
+          tap((res) => { this.searchFailed = false }),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })),
+      ),
       map((response) => {
+        // this.productSearchList = response;
+        // var list: any[] = [];
+        // response.forEach((res:any) => {
+        //   list.push({"AexpiryDate" : res.productExpiryDate, "BproductName": res.productName});
+        // });
        
+        // console.log("search list",list)
+        // return list;
         return response;
       })
-		);
+    );
 
-    onProductselect(data :any){
-      console.log("selelr product details: ", data)
+  productSearchList:any;
+  onProductselect(data: any) {
+    console.log("selelr product details: ", data)
     //  this.masterProduct = data.item;
-      this.productSearchResult = data.item;
-      this.searchShow = true;
-    }
-    
+    this.productSearchResult = data.item;
+    this.searchShow = true;
+    // var onSelectproduct = data.item;
+
+    // this.productSearchList.forEach((productObj:any) => {
+    //   if(productObj.productName === onSelectproduct.BproductName){
+    //     this.productSearchResult = productObj;
+    //     this.searchShow = true;
+    //   }
+    // });
+  }
+
 }
