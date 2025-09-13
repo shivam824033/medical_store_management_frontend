@@ -2,21 +2,21 @@
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab"
-        aria-controls="home" aria-selected="true">Add Product</button>
+      <button class="nav-link active" id="add-product" data-bs-toggle="tab" data-bs-target="#addProduct" type="button"
+        role="tab" aria-controls="addProduct" aria-selected="true">Add Product</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
-        aria-controls="profile" aria-selected="false">Sell Product</button>
+      <button class="nav-link" id="sell-product" data-bs-toggle="tab" data-bs-target="#sellProduct" type="button"
+        role="tab" aria-controls="sellProduct" aria-selected="false">Sell Product</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab"
-        aria-controls="contact" aria-selected="false">Search Product</button>
+      <button class="nav-link" id="search-product" data-bs-toggle="tab" data-bs-target="#searchProduct" type="button"
+        role="tab" aria-controls="searchProduct" aria-selected="false">Search Product</button>
     </li>
   </ul>
   <div class="tab-content" id="myTabContent">
 
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-pane fade show active" id="addProduct" role="tabpanel" aria-labelledby="add-product">
       <section class=" py-1 py-md-1">
         <div class="container">
           <div class="row justify-content-center">
@@ -28,9 +28,9 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="batchNumber">Batch Number <span style="color: red;">*</span></label>
-                        <input id="batchNumber" class="form-control" type="text" required [(ngModel)]="product.batchNumber"
-                          #batchNumber="ngModel" />
-                       <div *ngIf="batchNumber.invalid && (batchNumber.dirty || batchNumber.touched)">
+                        <input id="batchNumber" class="form-control" type="text" required
+                          [(ngModel)]="product.batchNumber" #batchNumber="ngModel" />
+                        <div *ngIf="batchNumber.invalid && (batchNumber.dirty || batchNumber.touched)">
                           <div class="error" *ngIf="batchNumber.hasError('required')">
                             Batch Number is required.
                           </div>
@@ -40,8 +40,8 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="productName">Product Name <span style="color: red;">*</span></label>
-                        <input id="productName" class="form-control" type="text" required [(ngModel)]="product.productName"
-                          #productName="ngModel" />
+                        <input id="productName" class="form-control" type="text" required
+                          [(ngModel)]="product.productName" #productName="ngModel" />
                         <div *ngIf="productName.invalid && (productName.dirty || productName.touched)">
                           <div class="error" *ngIf="productName.hasError('required')">
                             Product Name is required.
@@ -54,9 +54,9 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="expiryDate">Expiry date<span style="color: red;">*</span></label>
-                        <input id="expiryDate" type="date" class="form-control"
-                          [(ngModel)]="product.productExpiryDate" #expiryDate="ngModel" />
-                          <div *ngIf="expiryDate.invalid && (expiryDate.dirty || expiryDate.touched)">
+                        <input id="expiryDate" type="date" class="form-control" [(ngModel)]="product.productExpiryDate"
+                          #expiryDate="ngModel" />
+                        <div *ngIf="expiryDate.invalid && (expiryDate.dirty || expiryDate.touched)">
                           <div class="error" *ngIf="expiryDate.hasError('required')">
                             Expiry date is required.
                           </div>
@@ -66,7 +66,8 @@
                     <div class="col">
                       <div class="form-group">
                         <label for="productCategory">Product Category<span style="color: red;">*</span></label>
-                        <select id="productCategory" class="form-select" [(ngModel)]="product.productCategory" #productCategory="ngModel">
+                        <select id="productCategory" class="form-select" [(ngModel)]="product.productCategory"
+                          #productCategory="ngModel">
                           <option value="" disabled>Select</option>
                           <option *ngFor="let item of categories2" [value]="item.id">{{item.name}}</option>
                         </select>
@@ -141,9 +142,81 @@
       </section>
 
     </div>
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">profile</div>
-
-    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+    <div class="tab-pane fade" id="sellProduct" role="tabpanel" aria-labelledby="sell-product">
+      <section class="py-3">
+        <div class="container">
+          <h4 class="mb-3">Sell Product / Billing</h4>
+          <form (ngSubmit)="addToBill()" #billForm="ngForm">
+            <div class="row align-items-end">
+              <div class="col-md-5">
+                <label for="sellProductSearch" class="form-label">Product</label>
+                <input id="sellProductSearch" type="text" class="form-control" [(ngModel)]="searchProductTemp"
+                  name="selectedProductName" [ngbTypeahead]="searchProduct2" [resultTemplate]="rt"
+                  [inputFormatter]="formatter" (selectItem)="onProductSelectForBilling($event)"
+                  placeholder="Search product..." required>
+              </div>
+              <div class="col-md-3">
+                <label for="sellQuantity" class="form-label">Quantity</label>
+                <input id="sellQuantity" type="number" class="form-control" [(ngModel)]="sellQuantity"
+                  name="sellQuantity" min="1" required>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-success" type="submit"
+                  [disabled]="!selectedProduct || !sellQuantity">Add</button>
+              </div>
+            </div>
+          </form>
+          <div class="mt-4" *ngIf="billItems && billItems.length > 0">
+            <h5>Bill Details</h5>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Batch Number</th>
+                  <th>Expiry</th>
+                  <th>Quantity</th>
+                  <th>Price/Unit</th>
+                  <th>Discount (%)</th>
+                  <th>Subtotal</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of billItems; let i = index">
+                  <td>{{item.productName}}</td>
+                  <td>{{item.batchNumber}}</td>
+                  <td>{{item.productExpiryDate | date}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td>{{item.productPerPrice}}</td>
+                  <td>
+                    <input type="number" min="0" max="100" class="form-control form-control-sm"
+                      [(ngModel)]="item.discount" name="discount{{i}}" style="width:80px;" />
+                  </td>
+                  <td>
+                    {{
+                    (item.quantity * item.productPerPrice) -
+                    ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100)
+                    | number:'1.2-2'}}
+                  </td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" (click)="removeBillItem(i)">X</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-end">
+              <h5>
+                Total: ₹{{getBillTotal() | number:'1.2-2'}}
+              </h5>
+              <button class="btn btn-primary" (click)="finalizeBill()">Finalize Bill</button>
+            </div>
+          </div>
+          <div *ngIf="billSuccessMessage" class="alert alert-success mt-3">{{billSuccessMessage}}</div>
+          <div *ngIf="billErrorMessage" class="alert alert-danger mt-3">{{billErrorMessage}}</div>
+        </div>
+      </section>
+    </div>
+    <div class="tab-pane fade" id="searchProduct" role="tabpanel" aria-labelledby="search-product">
       <div class="mb-3 row">
         <label for="typeahead-http" class="col-xs-3 col-sm-auto col-form-label">Search</label>
         <div class="col">
@@ -151,32 +224,21 @@
           <input id="typeahead-http" type="text" class="form-control" [class.is-invalid]="searchFailed"
             [(ngModel)]="model" [ngbTypeahead]="searchProduct" [resultTemplate]="rt" [inputFormatter]="formatter"
             (selectItem)="onProductselect($event)" placeholder="Please enter medicine details" />
-          <ng-template #rt let-r="result" let-t="term">
-            {{r.productName}}
-            <!-- {{r.productName}}--{{r.productExpiryDate | date}} -->
-          </ng-template>
-
         </div>
 
       </div>
 
-      <div class="row" *ngIf="searchShow">
-        <!-- <div class="col">
-                    <h3>{{masterProduct.productName}}</h3>
-                    <p>{{masterProduct.productDescription}}</p>
-                </div> -->
+      <div class="row p-2" *ngIf="searchShow">
         <div class="card">
-          <div class="container ">
+          <div class="container-fluid ">
             <div class="row justify-content-center" style="font-weight: 600;">
               <div class="col">Batch Number</div>
-              <div class="col">Product Name</div>
               <div class="col">Expiry date</div>
               <div class="col">Quantity</div>
               <div class="col">Price</div>
             </div>
             <div class="row justify-content-center">
               <div class="col">{{productSearchResult.batchNumber}}</div>
-              <div class="col">{{productSearchResult.productName}}</div>
               <div class="col">{{productSearchResult.productExpiryDate | date}}</div>
               <div class="col">{{productSearchResult.productStripCount}}</div>
               <div class="col">{{productSearchResult.productPerPrice}}</div>
@@ -184,57 +246,27 @@
 
           </div>
         </div>
-        <!-- <div class="col-auto viewProduct"> -->
-
-        <!-- <ul  *ngFor="let product of productList; index as i">
-                            <li>
-                                {{product.batchNumber}}
-                            </li>
-                            <li>
-                                 {{product.productName}}
-                            </li>
-                            <li>
-                                {{product.productDescription}}
-                           </li>
-                           <li>
-                            {{product.productExpiryDate}}
-                       </li>
-                        </ul> -->
-
-
-
-        <!--
-                    <table class="table table-hover table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">Batch Number</th>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Expiry date</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Price</th>
-
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-
-                                <td>{{productSearchResult.batchNumber}}</td>
-                                <td>{{productSearchResult.productName}}</td>
-                                <td>{{productSearchResult.productExpiryDate | date}}</td>
-                                <td>{{productSearchResult.productStripCount}}</td>
-                                <td>{{productSearchResult.productPerPrice}}</td>
-
-                            </tr>
-                        </tbody>
-                    </table> -->
-
-
-        <!-- </div> -->
-
+        <div class="card mt-2">
+          <div class="container-fluid" style="text-align: start;">
+            <h5>Product Name :</h5>
+            <p>{{productSearchResult.productName}}</p>
+            <hr>
+            <h5>Product Description :</h5>
+            <p>{{productSearchResult.productDescription}}</p>
+          </div>
+        </div>
       </div>
 
 
     </div>
 
   </div>
+<ng-template #rt let-r="result" let-t="term">
+  <div class="p-2 rounded" style="background: #f0f7fa;">
+    <span class="fw-bold text-primary">{{ r.productName }}</span>
+    <span class="mx-2" style="font-size: 1.1rem; color: #0b0101;">|</span>
+    <span class="badge bg-info text-dark ms-2">Batch Number: {{ r.batchNumber }}</span>
+    <!-- <span class="badge bg-warning text-dark ms-2">Exp: {{ r.productExpiryDate | date }}</span>
+    <span class="badge bg-success ms-2">₹{{ r.productPerPrice }}</span> -->
+  </div>
+</ng-template>

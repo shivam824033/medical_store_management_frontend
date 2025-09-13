@@ -55,8 +55,8 @@
     <div *ngIf="token==null && !loginFlag && !signupFlag">
         <h1>Welcome to this page</h1>
         <h3>Want to open seller Account ? </h3>
-        <p style="color: blue; cursor: pointer;" (click)="signUp(mySignUpContent)">Sign Up Now</p>
-        <p>if already have account <span style="color: blue; cursor: pointer;"  (click)="doLogin(myLoginContent)">login here</span></p>
+        <p style="color: blue; cursor: pointer;" routerLink="/signup">Sign Up Now</p>
+        <p>if already have account <span style="color: blue; cursor: pointer;"  routerLink="/login">login here</span></p>
     </div>
     <div *ngIf="token!==null && token!==undefined">
         <div *ngIf="ownerFlag">
@@ -78,11 +78,11 @@
         <app-signup></app-signup>
     </div> -->
 
-    <ng-template #myLoginContent let-modal>
+    <!-- <ng-template #myLoginContent let-modal>
         <app-login></app-login>
     </ng-template>
     <ng-template #mySignUpContent let-modal>
         <app-signup></app-signup>
-    </ng-template>
+    </ng-template> -->
 
 </div>

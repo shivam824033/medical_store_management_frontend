@@ -24,7 +24,9 @@ export class GlobalService {
   constructor(private http: HttpClient) { }
 
   login(loginRequest: Login) {
-    return this.http.post(`${this.baseUrl}/api/auth/login`, loginRequest);
+    return this.http.post(
+      `${this.baseUrl}/api/auth/login`,loginRequest,{ withCredentials: true }
+    );
   }
 
   logoutSession() {
@@ -40,7 +42,7 @@ export class GlobalService {
   }
 
   signUp(signupRequest: any) {
-    return this.http.post(`${this.baseUrl}/api/auth/signUp`, signupRequest);
+    return this.http.post(`${this.baseUrl}/api/auth/signUp`, signupRequest, { withCredentials: true });
   }
 
   generateKey() {
@@ -60,7 +62,7 @@ export class GlobalService {
     return this.http.get(`${this.baseUrl}/api/public/getMasterProduct`, {
       params: PARAMS.set('keyword', term)
     }).pipe(
-        map((response: any) => response['response']))   
+        map((response: any) => response['response']))
   }
 
   getSellerProduct(term: string) {
@@ -72,7 +74,7 @@ export class GlobalService {
     return this.http.get(`${this.baseUrl}/api/public/getSellerProduct`, {
       params: PARAMS.set('keyword', term).set('storeId', 421302)
     }).pipe(
-        map((response: any) => response['response']))   
+        map((response: any) => response['response']))
   }
 
 }

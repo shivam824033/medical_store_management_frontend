@@ -45,10 +45,6 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     console.log('registration Details:', this.signUpRequest);
-    if(this.signupForm.invalid){
-      this.errorMessage="Please fill all required fields";
-      return;
-    }
     var fullName = this.signUpRequest.firstName + " " + this.signUpRequest.lastName;
     this.signUpRequest.fullName=fullName;
 

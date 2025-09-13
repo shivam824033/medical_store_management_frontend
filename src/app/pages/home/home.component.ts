@@ -48,17 +48,17 @@ export class HomeComponent implements OnInit {
 
   }
 
-  doLogin(myLoginContent : any) {
-    this.loginFlag = true;
-    this.signupFlag = false;
-    this.modalService.open(myLoginContent);
-  }
+  // doLogin(myLoginContent : any) {
+  //   this.loginFlag = true;
+  //   this.signupFlag = false;
+  //   this.modalService.open(myLoginContent);
+  // }
 
-  signUp(mySignUpContent : any) {
-    this.signupFlag = true;
-    this.loginFlag = false;
-    this.modalService.open(mySignUpContent);
-  }
+  // signUp(mySignUpContent : any) {
+  //   this.signupFlag = true;
+  //   this.loginFlag = false;
+  //   this.modalService.open(mySignUpContent);
+  // }
 
   logoutSession() {
 

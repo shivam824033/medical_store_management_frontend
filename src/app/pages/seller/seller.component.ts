@@ -30,6 +30,8 @@ export class SellerComponent implements OnInit {
     }
   ];
 
+sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any) | undefined;
+
   onClick(data: any) {
     console.log("on click", this.categories2)
   }
@@ -94,11 +96,37 @@ export class SellerComponent implements OnInit {
   masterProduct!: MasterProductDetails;
 
 //  formatter = (x: { BproductName: string, AexpiryDate: string }) => (x.BproductName, x.AexpiryDate);
-    formatter = (x: { productName: string}) => (x.productName);
+    formatter = (x: { productName: string, batchNumber: string }) => `${x.productName} (${x.batchNumber})`;
 
   searchProduct: OperatorFunction<string, any> = (text$: Observable<string>) =>
     text$.pipe(
-      debounceTime(300),
+      debounceTime(2000),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) =>
+        this.sellerService.getSellerProduct(term).pipe(
+          tap((res) => { this.searchFailed = false }),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })),
+      ),
+      map((response) => {
+        // this.productSearchList = response;
+        // var list: any[] = [];
+        // response.forEach((res:any) => {
+        //   list.push({"AexpiryDate" : res.productExpiryDate, "BproductName": res.productName});
+        // });
+
+        // console.log("search list",list)
+        // return list;
+        return response;
+      })
+    );
+
+    searchProduct2: OperatorFunction<string, any> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(2000),
       distinctUntilChanged(),
       tap(() => (this.searching = true)),
       switchMap((term) =>
@@ -136,6 +164,55 @@ export class SellerComponent implements OnInit {
     //     this.searchShow = true;
     //   }
     // });
+  }
+
+  searchProductTemp:any;
+  selectedProduct: any = null;
+  selectedProductName: string = '';
+  sellQuantity: number = 1;
+  billItems: any[] = [];
+  billSuccessMessage: string = '';
+  billErrorMessage: string = '';
+
+  onProductSelectForBilling(event: any) {
+    this.selectedProduct = event.item;
+    this.selectedProductName = this.selectedProduct.productName;
+  }
+
+  addToBill() {
+    if (!this.selectedProduct || !this.sellQuantity) return;
+    if (this.sellQuantity > this.selectedProduct.productStripCount) {
+      this.billErrorMessage = 'Not enough stock!';
+      return;
+    }
+    this.billItems.push({
+      ...this.selectedProduct,
+      quantity: this.sellQuantity,
+      discount: 0 // Initialize discount
+    });
+    this.selectedProduct = null;
+    this.selectedProductName = '';
+    this.sellQuantity = 1;
+    this.billErrorMessage = '';
+    this.searchProductTemp = null;
+  }
+
+  removeBillItem(index: number) {
+    this.billItems.splice(index, 1);
+  }
+
+  getBillTotal() {
+    return this.billItems.reduce((sum, item) =>
+      sum +
+      ((item.quantity * item.productPerPrice) -
+      ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100)), 0);
+  }
+
+  finalizeBill() {
+    // Implement your billing logic here (e.g., update stock, save bill, etc.)
+    this.billSuccessMessage = 'Bill finalized successfully!';
+    this.billItems = [];
+    setTimeout(() => this.billSuccessMessage = '', 3000);
   }
 
 }
