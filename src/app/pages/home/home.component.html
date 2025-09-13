@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="color: #e3f2fd;">
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light" style="color: #e3f2fd;">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Store Management</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -32,15 +32,15 @@
                 </li>
             </ul>
 
-            <!-- <form class="d-flex">
+            <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
-                </form> -->
+                </form>
 
             <div class="nav-item">
                 <div *ngIf="token==null && token==undefined">
-                    <button class="btn btn-outline-success" (click)="doLogin()">Login</button>
-                    <button class="btn btn-outline-dark" (click)="signUp()">Sign Up</button>
+                    <button class="btn btn-outline-success" (click)="doLogin(myLoginContent)">Login</button>
+                    <button class="btn btn-outline-dark" (click)="signUp(mySignUpContent)">Sign Up</button>
                 </div>
                 <div *ngIf="token!==null && token!==undefined">
                     <button class="btn btn-outline-dark" (click)="logoutSession()">Log out</button>
@@ -49,14 +49,14 @@
 
         </div>
     </div>
-</nav>
+</nav> -->
 
 <div class="home">
     <div *ngIf="token==null && !loginFlag && !signupFlag">
         <h1>Welcome to this page</h1>
         <h3>Want to open seller Account ? </h3>
-        <p style="color: blue; cursor: pointer;" (click)="signUp()">Sign Up Now</p>
-        <p>if already have account <span style="color: blue; cursor: pointer;"  (click)="doLogin()">login here</span></p>
+        <p style="color: blue; cursor: pointer;" (click)="signUp(mySignUpContent)">Sign Up Now</p>
+        <p>if already have account <span style="color: blue; cursor: pointer;"  (click)="doLogin(myLoginContent)">login here</span></p>
     </div>
     <div *ngIf="token!==null && token!==undefined">
         <div *ngIf="ownerFlag">
@@ -70,12 +70,19 @@
         </div>
     </div>
 
-    <div *ngIf="loginFlag">
+    <!-- <div *ngIf="loginFlag">
         <app-login></app-login>
-    </div>
+    </div> -->
 
-    <div *ngIf="signupFlag">
+    <!-- <div *ngIf="signupFlag">
         <app-signup></app-signup>
-    </div>
+    </div> -->
+
+    <ng-template #myLoginContent let-modal>
+        <app-login></app-login>
+    </ng-template>
+    <ng-template #mySignUpContent let-modal>
+        <app-signup></app-signup>
+    </ng-template>
 
 </div>

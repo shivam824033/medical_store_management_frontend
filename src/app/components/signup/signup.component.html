@@ -90,8 +90,14 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="gender">Gender<span style="color: red;">*</span></label>
-                                    <input id="gender" class="form-control" type="text" required
-                                        [(ngModel)]="signUpRequest.gender" #gender="ngModel" />
+                                    <!-- <input id="gender" class="form-control" type="text" required
+                                        [(ngModel)]="signUpRequest.gender" #gender="ngModel" /> -->
+
+                                    <select id="gender" class="form-select" [(ngModel)]="signUpRequest.gender" required
+                                        #gender="ngModel">
+                                        <option value="" disabled>Select</option>
+                                        <option *ngFor="let gendr of genderList" [value]="gendr">{{gendr}}</option>
+                                    </select>
 
                                     <div *ngIf="gender.invalid && (gender.dirty || gender.touched)">
                                         <div class="error" *ngIf="gender.hasError('required')">
@@ -271,7 +277,9 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div *ngIf="errorMessage" class="row p-2 alert alert-danger">
+                            {{ errorMessage }}
+                        </div>
                         <div class="row mt-3">
 
                             <div class="col-5">
@@ -328,7 +336,7 @@
                                 *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
                                 Valid email is required.
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -389,7 +397,7 @@
                                 Secret Key is required (minimum 10 characters).
                             </div>
                             <div>
-                                
+
                             </div>
                         </div>
                     </div>

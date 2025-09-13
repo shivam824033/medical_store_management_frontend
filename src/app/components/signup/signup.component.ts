@@ -18,6 +18,7 @@ export class SignupComponent implements OnInit {
   signupForm: UntypedFormGroup;
   signUpRequest = new SignUpRequest();
   roles = ["SELLER", "PUBLIC"];
+  genderList = ["Male", "Female", "Other"];
 
   errorMessage:any;
 
@@ -44,8 +45,17 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     console.log('registration Details:', this.signUpRequest);
+    if(this.signupForm.invalid){
+      this.errorMessage="Please fill all required fields";
+      return;
+    }
     var fullName = this.signUpRequest.firstName + " " + this.signUpRequest.lastName;
     this.signUpRequest.fullName=fullName;
+
+    if(this.signUpRequest.password !== this.confirmPassword){
+      this.errorMessage="Password and Confirm Password should be same";
+      return;
+    }
     this.signUpService.signUp(this.signUpRequest).subscribe(data => {
 
       Object.assign(this.loginRes, data);
@@ -55,8 +65,8 @@ export class SignupComponent implements OnInit {
         console.log("token" + this.loginRes.accessToken);
         localStorage.setItem("token", this.loginRes.accessToken);
         localStorage.setItem("UserDetails", JSON.stringify(this.loginRes.response))
-        //this.route.navigate(['']);
-        window.location.reload();
+        this.route.navigate(['']);
+       // window.location.reload();
       } else {
         console.log("error" + this.loginRes.errorMessage);
         this.errorMessage=this.loginRes.errorMessage;

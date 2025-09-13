@@ -8,12 +8,13 @@ import { SellerComponent } from './pages/seller/seller.component';
 import { PublicComponent } from './pages/public/public.component';
 
 const routes: Routes = [
-  {path : "", component: HomeComponent},
+  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path : "signup", component: SignupComponent},
-  {path : "login", component: LoginComponent},
-  {path : "owner", component: OwnerComponent},
-  {path : "seller", component: SellerComponent},
-  {path : "public", component: PublicComponent}
+  {path : "login", component: LoginComponent}
+  // {path : "owner", component: OwnerComponent},
+  // {path : "seller", component: SellerComponent},
+  // {path : "public", component: PublicComponent}
 ];
 
 @NgModule({

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Userdetails } from 'src/app/models/login';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -9,7 +10,7 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private homeService: GlobalService) { }
+  constructor(private homeService: GlobalService, private modalService: NgbModal) { }
 
   token!: string;
   sessionUserDetails = new Userdetails();
@@ -47,14 +48,16 @@ export class HomeComponent implements OnInit {
 
   }
 
-  doLogin() {
+  doLogin(myLoginContent : any) {
     this.loginFlag = true;
     this.signupFlag = false;
+    this.modalService.open(myLoginContent);
   }
 
-  signUp() {
+  signUp(mySignUpContent : any) {
     this.signupFlag = true;
     this.loginFlag = false;
+    this.modalService.open(mySignUpContent);
   }
 
   logoutSession() {

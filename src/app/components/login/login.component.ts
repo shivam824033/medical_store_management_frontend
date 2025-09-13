@@ -55,8 +55,8 @@ export class LoginComponent implements OnInit {
         // } else {
         //   this.route.navigate(['/public']);
         // }
-        //this.route.navigate(['']);
-        window.location.reload();
+        this.route.navigate(['']);
+        //window.location.reload();
 
       } else {
         console.log("error" + this.loginRes.errorMessage);

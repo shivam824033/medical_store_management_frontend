@@ -1,174 +1,192 @@
 <div class="container my-2">
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                role="tab" aria-controls="home" aria-selected="true">Add Product</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
-                role="tab" aria-controls="profile" aria-selected="false">Sell Product</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button"
-                role="tab" aria-controls="contact" aria-selected="false">Search Product</button>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab"
+        aria-controls="home" aria-selected="true">Add Product</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
+        aria-controls="profile" aria-selected="false">Sell Product</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab"
+        aria-controls="contact" aria-selected="false">Search Product</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
 
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-
-
-            <section class="py-3 py-md-5 mt-2">
-              <div class="container">
-                <div class="row justify-content-center">
-                  <div class="col">
-                    <div class="card border border-light-subtle rounded-3 shadow-sm">
-                      <div class="card-body p-3 p-md-4 p-xl-5">
-
-                        <h4 class="text-center mb-4">Add Product details</h4>
-
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <label for="username">Batch Number <span style="color: red;">*</span></label>
-                              <input id="username" class="form-control" type="text" required
-                                [(ngModel)]="product.batchNumber" #userName="ngModel" />
-
-                              <div *ngIf="userName.invalid && (userName.dirty || userName.touched)">
-                                <div class="error" *ngIf="userName.hasError('required')">
-                                  Username is required.
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div>
-                              <label for="email">Product Name <span style="color: red;">*</span></label>
-                              <input id="email" class="form-control" type="text" required
-                                [(ngModel)]="product.productName" #email="ngModel" />
-                              <div *ngIf="email.invalid && (email.dirty || email.touched)">
-                                <div class="error" *ngIf="email.hasError('required')">
-                                  Valid email is required.
-                                </div>
-                              </div>
-                            </div>
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <section class=" py-1 py-md-1">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col">
+              <div class="card border border-light-subtle rounded-3 shadow-sm">
+                <div class="card-body p-3 p-md-4 p-xl-5">
+                  <h4 class="text-center mb-4">Add Product details</h4>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="batchNumber">Batch Number <span style="color: red;">*</span></label>
+                        <input id="batchNumber" class="form-control" type="text" required [(ngModel)]="product.batchNumber"
+                          #batchNumber="ngModel" />
+                       <div *ngIf="batchNumber.invalid && (batchNumber.dirty || batchNumber.touched)">
+                          <div class="error" *ngIf="batchNumber.hasError('required')">
+                            Batch Number is required.
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <label for="category">Expiry date<span style="color: red;">*</span></label>
-                              <input id="expiryDate" type="date" class="form-control"
-                              [(ngModel)]="product.productExpiryDate" />
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-
-                              <label for="category">Product Category<span style="color: red;">*</span></label>
-
-                              <select id="category" class="form-select" [(ngModel)]="product.productCategory">
-                                <option value="" disabled>Select</option>
-                                <option *ngFor="let item of categories2" [value]="item.id">{{item.name}}</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-
-                          <div class="col">
-
-                            <div class="form-group">
-                              <label for="quantity">Qaunity<span style="color: red;">*</span></label>
-                              <input id="quantity" type="number" class="form-control"
-                              [(ngModel)]="product.productStripCount" />
-                            </div>
-                          </div>
-
-                          <div class="col">
-                            <div class="form-group">
-                              <label for="gender"> Product Price<span style="color: red;">*</span></label>
-                              <input id="gender" class="form-control" type="number" required
-                                [(ngModel)]="product.productPerPrice" #gender="ngModel" />
-
-                              <div *ngIf="gender.invalid && (gender.dirty || gender.touched)">
-                                <div class="error" *ngIf="gender.hasError('required')">
-                                  Gender is required.
-                                </div>
-                              </div>
-
-
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <label for="firstname">Product Description <span style="color: red;">*</span></label>
-                              <textarea id="firstname" class="form-control" type="text" required
-                                [(ngModel)]="product.productDescription" #firstname="ngModel"></textarea>
-
-                              <div *ngIf="firstname.invalid && (firstname.dirty || firstname.touched)">
-                                <div class="error" *ngIf="firstname.hasError('required')">
-                                  First Name is required.
-                                </div>
-                              </div>
-
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mt-3">
-
-                          <div class="col-5">
-                            <div class="d-grid my-3">
-                              <button class="btn btn-primary btn-md" type="submit"
-                                (click)="addProduct('')">Submit</button>
-                            </div>
-                            <!-- <button class="btn btn-primary" type="submit" >Submit</button> -->
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="productName">Product Name <span style="color: red;">*</span></label>
+                        <input id="productName" class="form-control" type="text" required [(ngModel)]="product.productName"
+                          #productName="ngModel" />
+                        <div *ngIf="productName.invalid && (productName.dirty || productName.touched)">
+                          <div class="error" *ngIf="productName.hasError('required')">
+                            Product Name is required.
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="expiryDate">Expiry date<span style="color: red;">*</span></label>
+                        <input id="expiryDate" type="date" class="form-control"
+                          [(ngModel)]="product.productExpiryDate" #expiryDate="ngModel" />
+                          <div *ngIf="expiryDate.invalid && (expiryDate.dirty || expiryDate.touched)">
+                          <div class="error" *ngIf="expiryDate.hasError('required')">
+                            Expiry date is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="productCategory">Product Category<span style="color: red;">*</span></label>
+                        <select id="productCategory" class="form-select" [(ngModel)]="product.productCategory" #productCategory="ngModel">
+                          <option value="" disabled>Select</option>
+                          <option *ngFor="let item of categories2" [value]="item.id">{{item.name}}</option>
+                        </select>
+                        <div *ngIf="productCategory.invalid && (productCategory.dirty || productCategory.touched)">
+                          <div class="error" *ngIf="productCategory.hasError('required')">
+                            Product Category is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="quantity">Qaunity<span style="color: red;">*</span></label>
+                        <input id="quantity" type="number" class="form-control"
+                          [(ngModel)]="product.productStripCount" />
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="gender"> Product Price<span style="color: red;">*</span></label>
+                        <input id="gender" class="form-control" type="number" required
+                          [(ngModel)]="product.productPerPrice" #gender="ngModel" />
+                        <div *ngIf="gender.invalid && (gender.dirty || gender.touched)">
+                          <div class="error" *ngIf="gender.hasError('required')">
+                            Gender is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="firstname">Product Description <span style="color: red;">*</span></label>
+                        <textarea id="firstname" class="form-control" type="text" required
+                          [(ngModel)]="product.productDescription" #firstname="ngModel"></textarea>
+
+                        <div *ngIf="firstname.invalid && (firstname.dirty || firstname.touched)">
+                          <div class="error" *ngIf="firstname.hasError('required')">
+                            First Name is required.
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-1">
+                    <label *ngIf="errorMessage" style="color: red;">{{errorMessage}}</label>
+                    <label *ngIf="successMessage" style="color: green;">{{successMessage}}</label>
+                  </div>
+                  <div class="row mt-1">
+                    <div class="col-5">
+                      <div class="d-grid my-3">
+                        <button class="btn btn-primary btn-md" type="submit" (click)="addProduct('')"
+                          [disabled]="addAnotherbtn">Add Product</button>
+                      </div>
+                    </div>
+                    <div class="col" *ngIf="addAnotherbtn">
+                      <div class="d-grid my-3">
+                        <label style="color: blue; cursor: pointer;" (click)="addAnotherProduct()">+ Add
+                          Another</label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">profile</div>
+
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+      <div class="mb-3 row">
+        <label for="typeahead-http" class="col-xs-3 col-sm-auto col-form-label">Search</label>
+        <div class="col">
+
+          <input id="typeahead-http" type="text" class="form-control" [class.is-invalid]="searchFailed"
+            [(ngModel)]="model" [ngbTypeahead]="searchProduct" [resultTemplate]="rt" [inputFormatter]="formatter"
+            (selectItem)="onProductselect($event)" placeholder="Please enter medicine details" />
+          <ng-template #rt let-r="result" let-t="term">
+            {{r.productName}}
+            <!-- {{r.productName}}--{{r.productExpiryDate | date}} -->
+          </ng-template>
 
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">profile</div>
 
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <div class="mb-3 row">
-                <label for="typeahead-http" class="col-xs-3 col-sm-auto col-form-label">Search</label>
-                <div class="col">
+      </div>
 
-                    <input id="typeahead-http" type="text" class="form-control" [class.is-invalid]="searchFailed"
-                        [(ngModel)]="model" [ngbTypeahead]="searchProduct" [resultTemplate]="rt"
-                        [inputFormatter]="formatter" (selectItem)="onProductselect($event)"
-                        placeholder="Please enter medicine details" />
-                    <ng-template #rt let-r="result" let-t="term">
-                        {{r.productName}}
-                        <!-- <ngb-highlight [result]="r.productName" [term]="t"></ngb-highlight> -->
-                    </ng-template>
-
-                </div>
-
-            </div>
-
-            <div class="row" *ngIf="searchShow">
-                <!-- <div class="col">
+      <div class="row" *ngIf="searchShow">
+        <!-- <div class="col">
                     <h3>{{masterProduct.productName}}</h3>
                     <p>{{masterProduct.productDescription}}</p>
                 </div> -->
+        <div class="card">
+          <div class="container ">
+            <div class="row justify-content-center" style="font-weight: 600;">
+              <div class="col">Batch Number</div>
+              <div class="col">Product Name</div>
+              <div class="col">Expiry date</div>
+              <div class="col">Quantity</div>
+              <div class="col">Price</div>
+            </div>
+            <div class="row justify-content-center">
+              <div class="col">{{productSearchResult.batchNumber}}</div>
+              <div class="col">{{productSearchResult.productName}}</div>
+              <div class="col">{{productSearchResult.productExpiryDate | date}}</div>
+              <div class="col">{{productSearchResult.productStripCount}}</div>
+              <div class="col">{{productSearchResult.productPerPrice}}</div>
+            </div>
 
-                <div class="col-auto viewProduct">
+          </div>
+        </div>
+        <!-- <div class="col-auto viewProduct"> -->
 
-                    <!-- <ul  *ngFor="let product of productList; index as i">
+        <!-- <ul  *ngFor="let product of productList; index as i">
                             <li>
                                 {{product.batchNumber}}
                             </li>
@@ -183,27 +201,9 @@
                        </li>
                         </ul> -->
 
-                        <div class="card">
-                            <div class="container ">
-                                <div class="row justify-content-center">
-                                    <div class="col">Batch Number</div>
-                                    <div class="col">Product Name</div>
-                                    <div class="col">Expiry date</div>
-                                    <div class="col">Quantity</div>
-                                    <div class="col">Price</div>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <div class="col">{{productSearchResult.batchNumber}}</div>
-                                    <div class="col">{{productSearchResult.productName}}</div>
-                                    <div class="col">{{productSearchResult.productExpiryDate | date}}</div>
-                                    <div class="col">{{productSearchResult.productStripCount}}</div>
-                                    <div class="col">{{productSearchResult.productPerPrice}}</div>
-                                </div>
 
-                            </div>
-                        </div>
 
-<!--
+        <!--
                     <table class="table table-hover table-dark">
                         <thead>
                             <tr>
@@ -230,11 +230,11 @@
                     </table> -->
 
 
-            </div>
+        <!-- </div> -->
 
-        </div>
+      </div>
 
 
     </div>
 
-</div>
+  </div>
