@@ -20,133 +20,123 @@
 
 
 
-            <section class=" py-3 py-md-5 mt-2">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col">
-                            <div class="card border border-light-subtle rounded-3 shadow-sm">
-                                <div class="card-body p-3 p-md-4 p-xl-5">
+            <section class="py-3 py-md-5 mt-2">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col">
+                    <div class="card border border-light-subtle rounded-3 shadow-sm">
+                      <div class="card-body p-3 p-md-4 p-xl-5">
 
-                                    <h4 class="text-center mb-4">add Product details</h4>
+                        <h4 class="text-center mb-4">Add Product details</h4>
 
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label for="username">Batch Number <span style="color: red;">*</span></label>
+                              <input id="username" class="form-control" type="text" required
+                                [(ngModel)]="product.batchNumber" #userName="ngModel" />
 
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="username">Batch Number <span
-                                                        style="color: red;">*</span></label>
-                                                <input id="username" class="form-control" type="text" required
-                                                    [(ngModel)]="product.batchNumber" #userName="ngModel" />
-
-                                                <div *ngIf="userName.invalid && (userName.dirty || userName.touched)">
-                                                    <div class="error" *ngIf="userName.hasError('required')">
-                                                        Username is required.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div>
-                                                <label for="email">Product Name <span
-                                                        style="color: red;">*</span></label>
-                                                <input id="email" class="form-control" type="text" required
-                                                    [(ngModel)]="product.productName" #email="ngModel" />
-                                                <div *ngIf="email.invalid && (email.dirty || email.touched)">
-                                                    <div class="error" *ngIf="email.hasError('required')">
-                                                        Valid email is required.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="firstname">Product Description <span
-                                                        style="color: red;">*</span></label>
-                                                <input id="firstname" class="form-control" type="text" required
-                                                    [(ngModel)]="product.productDescription" #firstname="ngModel" />
-
-                                                <div
-                                                    *ngIf="firstname.invalid && (firstname.dirty || firstname.touched)">
-                                                    <div class="error" *ngIf="firstname.hasError('required')">
-                                                        First Name is required.
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group">
-
-                                                <label for="category">Product Category<span
-                                                        style="color: red;">*</span></label>
-
-                                                <select id="category" class="form-select" [(ngModel)]="product.productCategory">
-                                                    <option value="" disabled>Select</option>
-                                                    <option *ngFor="let item of categories2" [value]="item.id">{{item.name}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-
-                                        <div class="col">
-
-                                            <div class="form-group">
-                                                <label for="quantity">Qaunity<span
-                                                    style="color: red;">*</span></label>
-                                                <input id="quantity" type="number" class="form-control" 
-                                                [(ngModel)]="product.productStripCount" />
-                                            </div>
-                                        </div>
-
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="gender"> Product Price<span
-                                                        style="color: red;">*</span></label>
-                                                <input id="gender" class="form-control" type="number" required
-                                                    [(ngModel)]="product.productPerPrice" #gender="ngModel" />
-
-                                                <div *ngIf="gender.invalid && (gender.dirty || gender.touched)">
-                                                    <div class="error" *ngIf="gender.hasError('required')">
-                                                        Gender is required.
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                  
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-
-                                            <div class="form-group">
-                                                <label for="category">Expiry date<span
-                                                    style="color: red;">*</span></label>
-                                                <input id="expiryDate" type="date" class="form-control" 
-                                                [(ngModel)]="product.productExpiryDate" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-3">
-
-                                        <div class="col-5">
-                                            <div class="d-grid my-3">
-                                                <button class="btn btn-primary btn-md" type="submit"
-                                                    (click)="addProduct('')">Submit</button>
-                                            </div>
-                                            <!-- <button class="btn btn-primary" type="submit" >Submit</button> -->
-                                        </div>
-                                    </div>
+                              <div *ngIf="userName.invalid && (userName.dirty || userName.touched)">
+                                <div class="error" *ngIf="userName.hasError('required')">
+                                  Username is required.
                                 </div>
+                              </div>
                             </div>
+                          </div>
+                          <div class="col">
+                            <div>
+                              <label for="email">Product Name <span style="color: red;">*</span></label>
+                              <input id="email" class="form-control" type="text" required
+                                [(ngModel)]="product.productName" #email="ngModel" />
+                              <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                                <div class="error" *ngIf="email.hasError('required')">
+                                  Valid email is required.
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label for="category">Expiry date<span style="color: red;">*</span></label>
+                              <input id="expiryDate" type="date" class="form-control"
+                              [(ngModel)]="product.productExpiryDate" />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+
+                              <label for="category">Product Category<span style="color: red;">*</span></label>
+
+                              <select id="category" class="form-select" [(ngModel)]="product.productCategory">
+                                <option value="" disabled>Select</option>
+                                <option *ngFor="let item of categories2" [value]="item.id">{{item.name}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          <div class="col">
+
+                            <div class="form-group">
+                              <label for="quantity">Qaunity<span style="color: red;">*</span></label>
+                              <input id="quantity" type="number" class="form-control"
+                              [(ngModel)]="product.productStripCount" />
+                            </div>
+                          </div>
+
+                          <div class="col">
+                            <div class="form-group">
+                              <label for="gender"> Product Price<span style="color: red;">*</span></label>
+                              <input id="gender" class="form-control" type="number" required
+                                [(ngModel)]="product.productPerPrice" #gender="ngModel" />
+
+                              <div *ngIf="gender.invalid && (gender.dirty || gender.touched)">
+                                <div class="error" *ngIf="gender.hasError('required')">
+                                  Gender is required.
+                                </div>
+                              </div>
+
+
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label for="firstname">Product Description <span style="color: red;">*</span></label>
+                              <textarea id="firstname" class="form-control" type="text" required
+                                [(ngModel)]="product.productDescription" #firstname="ngModel"></textarea>
+
+                              <div *ngIf="firstname.invalid && (firstname.dirty || firstname.touched)">
+                                <div class="error" *ngIf="firstname.hasError('required')">
+                                  First Name is required.
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mt-3">
+
+                          <div class="col-5">
+                            <div class="d-grid my-3">
+                              <button class="btn btn-primary btn-md" type="submit"
+                                (click)="addProduct('')">Submit</button>
+                            </div>
+                            <!-- <button class="btn btn-primary" type="submit" >Submit</button> -->
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </section>
 
         </div>
@@ -209,11 +199,11 @@
                                     <div class="col">{{productSearchResult.productStripCount}}</div>
                                     <div class="col">{{productSearchResult.productPerPrice}}</div>
                                 </div>
-    
+
                             </div>
                         </div>
-                 
-<!-- 
+
+<!--
                     <table class="table table-hover table-dark">
                         <thead>
                             <tr>
@@ -222,7 +212,7 @@
                                 <th scope="col">Expiry date</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Price</th>
-                               
+
                             </tr>
                         </thead>
 
@@ -234,7 +224,7 @@
                                 <td>{{productSearchResult.productExpiryDate | date}}</td>
                                 <td>{{productSearchResult.productStripCount}}</td>
                                 <td>{{productSearchResult.productPerPrice}}</td>
-                               
+
                             </tr>
                         </tbody>
                     </table> -->

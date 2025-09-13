@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   loginReq = new Login();
   loginRes = new LoginResponse();
   loginForm: UntypedFormGroup;
+  loginErrorMsg : string = '';
 
   constructor(private fb: UntypedFormBuilder, private loginService: GlobalService, private route: Router) {
 
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
 
 
 
-  
+
 
   ngOnInit(): void {
 
@@ -33,6 +34,10 @@ export class LoginComponent implements OnInit {
 
   doLogin() {
     console.log("login res" + this.loginReq)
+    if(this.loginForm.invalid){
+      return;
+    }
+    this.loginErrorMsg ='';
     this.loginService.login(this.loginForm.value).subscribe(data => {
 
       console.log("login response" + data);
@@ -55,6 +60,7 @@ export class LoginComponent implements OnInit {
 
       } else {
         console.log("error" + this.loginRes.errorMessage);
+        this.loginErrorMsg = this.loginRes.errorMessage;
       }
 
     });

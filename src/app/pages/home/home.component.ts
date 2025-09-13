@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   publicFlag!: boolean;
 
   ngOnInit(): void {
-   
+
     this.loginFlag = false;
     this.signupFlag = false;
     this.ownerFlag = false;
@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
 
     console.log("home")
     const token = localStorage.getItem('token');
+     console.log("token : ", token)
     const userDetails = localStorage.getItem('UserDetails');
     if (token !== null && token !== undefined && userDetails !== null && userDetails !== undefined) {
       this.token = token;
