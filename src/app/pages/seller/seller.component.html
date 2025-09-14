@@ -292,13 +292,17 @@
                             <th>Expiry</th>
                             <th>Quantity</th>
                             <th>Price/Unit</th>
-                            <th>Discount (%)</th>
+                            <th>Discount (%)
+                               <input type="number" min="0" max="100" class="form-control form-control-sm"
+                                [(ngModel)]="discount" name="discount" style="width:50px;"
+                                (ngModelChange)="onDiscountChange(discount)" />
+                            </th>
                             <th>Subtotal</th>
                             <th>Remove</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let item of billItems; let i = index" [ngClass]="{'table-danger': item.error}">
+                          <tr *ngFor="let item of billItems; let i = index" [ngClass]="{'table-danger': item.error, 'table-warning': item.warning}">
                             <td>{{item.productName}}</td>
                             <td>{{item.batchNumber}}</td>
                             <td>{{item.productExpiryDate | date}}</td>

@@ -12,7 +12,7 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class SellerComponent implements OnInit {
 
-  successMessage ="";
+  successMessage = "";
   errorMessage = "";
   searchShow = false;
   addAnotherbtn = false;
@@ -31,10 +31,11 @@ export class SellerComponent implements OnInit {
     }
   ];
 
-sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any) | undefined;
+  sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any) | undefined;
   selectedFile: any;
-  progress: number =0;
+  progress: number = 0;
   message: string | undefined;
+  discount: number = 0;;
 
   onClick(data: any) {
     console.log("on click", this.categories2)
@@ -58,6 +59,16 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
   }
 
 
+  onDiscountChange(discount: any) {
+   if(this.billItems && this.billItems.length > 0){
+    this.billItems.forEach(item => {
+      item.discount = discount;
+      this.getTotalBillPerPRoduct(item);
+    });
+  }
+}
+
+
 
   addProduct(form: any) {
     this.errorMessage = "";
@@ -73,7 +84,7 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
 
           if (data.errorMessage != null) {
             this.errorMessage = data.errorMessage;
-          } else{
+          } else {
             this.successMessage = 'Product added successfully'; //data.response;
             this.addAnotherbtn = true;
           }
@@ -99,8 +110,8 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
   model: any;
   masterProduct!: MasterProductDetails;
 
-//  formatter = (x: { BproductName: string, AexpiryDate: string }) => (x.BproductName, x.AexpiryDate);
-    formatter = (x: { productName: string, batchNumber: string }) => `${x.productName} (${x.batchNumber})`;
+  //  formatter = (x: { BproductName: string, AexpiryDate: string }) => (x.BproductName, x.AexpiryDate);
+  formatter = (x: { productName: string, batchNumber: string }) => `${x.productName} (${x.batchNumber})`;
 
   searchProduct: OperatorFunction<string, any> = (text$: Observable<string>) =>
     text$.pipe(
@@ -128,7 +139,7 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
       })
     );
 
-    searchProduct2: OperatorFunction<string, any> = (text$: Observable<string>) =>
+  searchProduct2: OperatorFunction<string, any> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -154,7 +165,7 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
       })
     );
 
-  productSearchList:any;
+  productSearchList: any;
   onProductselect(data: any) {
     console.log("selelr product details: ", data)
     //  this.masterProduct = data.item;
@@ -170,7 +181,7 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
     // });
   }
 
-  searchProductTemp:any;
+  searchProductTemp: any;
   selectedProduct: any = null;
   selectedProductName: string = '';
   sellQuantity: number = 1;
@@ -184,17 +195,37 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
   }
 
   addToBill() {
+
+    this.billErrorMessage = '';
     if (!this.selectedProduct || !this.sellQuantity) return;
     if (this.sellQuantity > this.selectedProduct.productStripCount) {
       this.billErrorMessage = 'Not enough stock!';
       return;
     }
+
+    this.billItems.forEach(item => {
+      if (item.batchNumber === this.selectedProduct.batchNumber) {
+        this.billErrorMessage = 'Product Already exits in the bill!';
+        this.searchProductTemp = null;
+        item.warning = 'Product Already exits in the bill!';
+        return;
+      } else {
+        item.warning = '';
+      }
+    });
+
+    if (this.billErrorMessage) {
+      return;
+    }
+
+
     this.billItems.push({
       ...this.selectedProduct,
       quantity: this.sellQuantity,
-      discount: 0 ,// Initialize discount,
-      error:'',
-      tempValue:0
+      discount: this.discount,// Initialize discount,
+      error: '',
+      warning: '',
+      tempValue: 0
     });
     this.selectedProduct = null;
     this.selectedProductName = '';
@@ -207,22 +238,22 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
     this.billItems.splice(index, 1);
   }
 
-  tempTotalAmount: number =0;
+  tempTotalAmount: number = 0;
   getBillTotal() {
-    if(!this.billErrorMessage){
-    this.tempTotalAmount =this.billItems.reduce((sum, item) =>
-      sum +
-      ((item.quantity * item.productPerPrice) -
-      ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100)), 0);
+    if (!this.billErrorMessage) {
+      this.tempTotalAmount = this.billItems.reduce((sum, item) =>
+        sum +
+        ((item.quantity * item.productPerPrice) -
+          ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100)), 0);
     }
 
     return this.tempTotalAmount
   }
-   tempTotalAmountPerProduct: number =0;
-    getTotalBillPerPRoduct(item :any) {
-    if(!item.error){
-     item.tempValue = ((item.quantity * item.productPerPrice) -
-      ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100));
+  tempTotalAmountPerProduct: number = 0;
+  getTotalBillPerPRoduct(item: any) {
+    if (!item.error) {
+      item.tempValue = ((item.quantity * item.productPerPrice) -
+        ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100));
     }
     return item.tempValue;
   }
@@ -236,20 +267,20 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
   }
 
   onQuantityChange(index: number) {
-  // Optionally, add validation or update logic here if needed
-  // For example, prevent negative or zero quantity, or check stock
-  this.billErrorMessage='';
-  this.billItems[index].error='';
-    if(this.billItems[index].quantity > this.billItems[index].productStripCount) {
-         this.billItems[index].error = 'Not enough stock!';
-         this.billErrorMessage = 'Not enough stock!';
-         return;
+    // Optionally, add validation or update logic here if needed
+    // For example, prevent negative or zero quantity, or check stock
+    this.billErrorMessage = '';
+    this.billItems[index].error = '';
+    if (this.billItems[index].quantity > this.billItems[index].productStripCount) {
+      this.billItems[index].error = 'Not enough stock!';
+      this.billErrorMessage = 'Not enough stock!';
+      return;
+    }
+    if (this.billItems[index].quantity < 1) {
+      this.billItems[index].quantity = 1;
+    }
   }
-  if (this.billItems[index].quantity < 1) {
-    this.billItems[index].quantity = 1;
-  }
-}
- onFileSelected(event: any): void {
+  onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
     this.progress = 0;
     this.message = '';
