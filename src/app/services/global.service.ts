@@ -1,9 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Login } from '../models/login';
 import { ProductDetails } from '../models/product-details';
 import { map, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -75,6 +75,29 @@ export class GlobalService {
       params: PARAMS.set('keyword', term).set('storeId', 421302)
     }).pipe(
         map((response: any) => response['response']))
+  }
+
+    upload(file: File): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+
+    let endpoint = '';
+
+    // Detect file type by extension
+    if (file.name.endsWith('.csv')) {
+      endpoint = `${this.baseUrl}/api/seller/csv`;
+    } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+      endpoint = `${this.baseUrl}/api/seller/excel`;
+    } else {
+      throw new Error('Unsupported file type');
+    }
+
+    const req = new HttpRequest('POST', endpoint, formData, {
+      reportProgress: true,
+      responseType: 'text'
+    });
+
+    return this.http.request(req);
   }
 
 }

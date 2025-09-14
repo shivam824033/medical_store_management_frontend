@@ -1,3 +1,4 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { catchError, debounceTime, distinctUntilChanged, map, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
@@ -31,6 +32,9 @@ export class SellerComponent implements OnInit {
   ];
 
 sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any) | undefined;
+  selectedFile: any;
+  progress: number =0;
+  message: string | undefined;
 
   onClick(data: any) {
     console.log("on click", this.categories2)
@@ -126,7 +130,7 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
 
     searchProduct2: OperatorFunction<string, any> = (text$: Observable<string>) =>
     text$.pipe(
-      debounceTime(2000),
+      debounceTime(500),
       distinctUntilChanged(),
       tap(() => (this.searching = true)),
       switchMap((term) =>
@@ -188,7 +192,9 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
     this.billItems.push({
       ...this.selectedProduct,
       quantity: this.sellQuantity,
-      discount: 0 // Initialize discount
+      discount: 0 ,// Initialize discount,
+      error:'',
+      tempValue:0
     });
     this.selectedProduct = null;
     this.selectedProductName = '';
@@ -201,18 +207,72 @@ sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]
     this.billItems.splice(index, 1);
   }
 
+  tempTotalAmount: number =0;
   getBillTotal() {
-    return this.billItems.reduce((sum, item) =>
+    if(!this.billErrorMessage){
+    this.tempTotalAmount =this.billItems.reduce((sum, item) =>
       sum +
       ((item.quantity * item.productPerPrice) -
       ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100)), 0);
+    }
+
+    return this.tempTotalAmount
   }
+   tempTotalAmountPerProduct: number =0;
+    getTotalBillPerPRoduct(item :any) {
+    if(!item.error){
+     item.tempValue = ((item.quantity * item.productPerPrice) -
+      ((item.quantity * item.productPerPrice * (item.discount || 0)) / 100));
+    }
+    return item.tempValue;
+  }
+
 
   finalizeBill() {
     // Implement your billing logic here (e.g., update stock, save bill, etc.)
     this.billSuccessMessage = 'Bill finalized successfully!';
     this.billItems = [];
     setTimeout(() => this.billSuccessMessage = '', 3000);
+  }
+
+  onQuantityChange(index: number) {
+  // Optionally, add validation or update logic here if needed
+  // For example, prevent negative or zero quantity, or check stock
+  this.billErrorMessage='';
+  this.billItems[index].error='';
+    if(this.billItems[index].quantity > this.billItems[index].productStripCount) {
+         this.billItems[index].error = 'Not enough stock!';
+         this.billErrorMessage = 'Not enough stock!';
+         return;
+  }
+  if (this.billItems[index].quantity < 1) {
+    this.billItems[index].quantity = 1;
+  }
+}
+ onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+    this.progress = 0;
+    this.message = '';
+  }
+
+  uploadFile(): void {
+    if (!this.selectedFile) {
+      this.message = 'Please select a file first!';
+      return;
+    }
+
+    this.sellerService.upload(this.selectedFile).subscribe({
+      next: (event: any) => {
+        if (event.type === HttpEventType.UploadProgress && event.total) {
+          this.progress = Math.round(100 * event.loaded / event.total);
+        } else if (event instanceof HttpResponse) {
+          this.message = event.body;
+        }
+      },
+      error: (err) => {
+        this.message = 'Could not upload the file! ' + err.message;
+      }
+    });
   }
 
 }
