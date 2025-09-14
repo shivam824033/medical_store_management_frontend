@@ -60,12 +60,12 @@ body, .background-wrapper {
 
 /* Home Section */
 .home {
-    margin: 40px auto 0 auto;
-    max-width: 50%;
-    background: #fff;
+    margin: 10px auto 0 auto;
+    /* max-width: 50%; */
+    /* background: #fff;
     border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-    padding: 40px 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10); */
+    /* padding: 20px 20px; */
     text-align: center;
     position: relative;
     z-index: 2;

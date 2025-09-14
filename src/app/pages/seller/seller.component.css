@@ -122,7 +122,11 @@ label.col-form-label {
   cursor: pointer;
   font-weight: 500;
 }
-
+.table-scroll{
+max-height :300px;
+overflow-y: auto
+}
+ /* [ngClass]="{'table-scroll' : billItems.length > 6}" */
 /* Responsive Tweaks */
 @media (max-width: 900px) {
     .row {
