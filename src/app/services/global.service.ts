@@ -25,7 +25,7 @@ export class GlobalService {
 
   login(loginRequest: Login) {
     return this.http.post(
-      `${this.baseUrl}/api/auth/login`,loginRequest,{ withCredentials: true }
+      `${this.baseUrl}/api/auth/login`, loginRequest, { withCredentials: true }
     );
   }
 
@@ -62,7 +62,7 @@ export class GlobalService {
     return this.http.get(`${this.baseUrl}/api/public/getMasterProduct`, {
       params: PARAMS.set('keyword', term)
     }).pipe(
-        map((response: any) => response['response']))
+      map((response: any) => response['response']))
   }
 
   getSellerProduct(term: string) {
@@ -74,10 +74,10 @@ export class GlobalService {
     return this.http.get(`${this.baseUrl}/api/public/getSellerProduct`, {
       params: PARAMS.set('keyword', term).set('storeId', 421302)
     }).pipe(
-        map((response: any) => response['response']))
+      map((response: any) => response['response']))
   }
 
-    upload(file: File): Observable<HttpEvent<any>> {
+  upload(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
 
@@ -99,5 +99,17 @@ export class GlobalService {
 
     return this.http.request(req);
   }
+
+  // ...existing code...
+  finalizeBill(billItems: any[]) {
+    return this.http.post(`${this.baseUrl}/api/seller/finalizeBill`, billItems);
+  }
+  // ...existing code...
+
+  // ...existing code...
+getExpiredProducts(date: string) {
+  return this.http.post(`${this.baseUrl}/api/seller/expiredProducts`, { date });
+}
+// ...existing code...
 
 }

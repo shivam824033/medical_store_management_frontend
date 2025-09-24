@@ -115,9 +115,12 @@ export class SellerComponent implements OnInit {
 
   searchProduct: OperatorFunction<string, any> = (text$: Observable<string>) =>
     text$.pipe(
-      debounceTime(2000),
+      debounceTime(500),
       distinctUntilChanged(),
-      tap(() => (this.searching = true)),
+      tap(() => {
+        this.searching = true;
+        this.expiryShow = false;
+      }),
       switchMap((term) =>
         this.sellerService.getSellerProduct(term).pipe(
           tap((res) => { this.searchFailed = false }),
@@ -143,7 +146,10 @@ export class SellerComponent implements OnInit {
     text$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      tap(() => (this.searching = true)),
+      tap(() => {
+        this.searching = true;
+        this.expiryShow = false;
+      }),
       switchMap((term) =>
         this.sellerService.getSellerProduct(term).pipe(
           tap((res) => { this.searchFailed = false }),
@@ -259,12 +265,29 @@ export class SellerComponent implements OnInit {
   }
 
 
-  finalizeBill() {
-    // Implement your billing logic here (e.g., update stock, save bill, etc.)
-    this.billSuccessMessage = 'Bill finalized successfully!';
-    this.billItems = [];
-    setTimeout(() => this.billSuccessMessage = '', 3000);
+// ...existing code...
+finalizeBill() {
+  this.billErrorMessage = '';
+  if (this.billItems.length === 0) {
+    this.billErrorMessage = 'No items in the bill to finalize!';
+    return;
   }
+  this.sellerService.finalizeBill(this.billItems).subscribe({
+    next: (res: any) => {
+      if (res.errorMessage) {
+        this.billErrorMessage = res.errorMessage;
+      } else {
+        this.billSuccessMessage = res.response || 'Bill finalized successfully!';
+        this.billItems = [];
+        setTimeout(() => this.billSuccessMessage = '', 3000);
+      }
+    },
+    error: (err) => {
+      this.billErrorMessage = 'Failed to finalize bill!';
+    }
+  });
+}
+// ...existing code...
 
   onQuantityChange(index: number) {
     // Optionally, add validation or update logic here if needed
@@ -305,5 +328,30 @@ export class SellerComponent implements OnInit {
       }
     });
   }
+
+  expiredProducts: any[] = [];
+expiredProductDate: string = '';
+expiredProductError: string = '';
+expiryShow: boolean = false;
+fetchExpiredProducts() {
+  this.expiredProductError = '';
+  if (!this.expiredProductDate) {
+    this.expiredProductError = 'Please select a date.';
+    return;
+  }
+  this.searchShow =false;
+  this.sellerService.getExpiredProducts(this.expiredProductDate).subscribe(
+    (res : any) => {
+      this.expiredProducts = res;
+       this.expiryShow = true;
+      if(this.expiredProducts.length === 0){
+        this.expiredProductError = 'No expired products found before the selected date.';
+        this.expiryShow = false;
+      }
+
+    }), {
+    error: () => this.expiredProductError = 'Failed to fetch expired products.'
+  };
+}
 
 }
