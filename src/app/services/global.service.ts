@@ -4,6 +4,7 @@ import { Login } from '../models/login';
 import { ProductDetails } from '../models/product-details';
 import { map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,7 +19,7 @@ const httpOptions = {
 export class GlobalService {
 
 
-  baseUrl = "http://localhost:8080";
+  baseUrl = "http://localhost:5000"; //"http://stocklyte.ap-south-1.elasticbeanstalk.com"
 
 
   constructor(private http: HttpClient) { }
@@ -65,14 +66,14 @@ export class GlobalService {
       map((response: any) => response['response']))
   }
 
-  getSellerProduct(term: string) {
+  getSellerProduct(term: string, storeId: number) {
     if (term === '') {
       return of([]);
     }
     term = term.trim();
     const PARAMS = new HttpParams({});
     return this.http.get(`${this.baseUrl}/api/public/getSellerProduct`, {
-      params: PARAMS.set('keyword', term).set('storeId', 421302)
+      params: PARAMS.set('keyword', term).set('storeId', storeId)
     }).pipe(
       map((response: any) => response['response']))
   }
@@ -102,7 +103,7 @@ export class GlobalService {
 
   // ...existing code...
   finalizeBill(billItems: any[]) {
-    return this.http.post(`${this.baseUrl}/api/seller/finalizeBill`, billItems);
+    return this.http.post(`${this.baseUrl}/api/invoice/createInvoice`, billItems);
   }
   // ...existing code...
 

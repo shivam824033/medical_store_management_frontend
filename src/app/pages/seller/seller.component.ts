@@ -12,6 +12,7 @@ import { GlobalService } from 'src/app/services/global.service';
 })
 export class SellerComponent implements OnInit {
 
+  isLoading: boolean = false;
   successMessage = "";
   errorMessage = "";
   searchShow = false;
@@ -31,11 +32,18 @@ export class SellerComponent implements OnInit {
     }
   ];
 
+  customerName: string = '';
+  customerMobile: string = '';
+  customerAddress: string = '';
+
   sum: ((previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any) | undefined;
   selectedFile: any;
   progress: number = 0;
   message: string | undefined;
-  discount: number = 0;;
+  discount: number = 0;
+  invoicePreview: any;
+  invoiceViewFlag: boolean = false;
+  ;
 
   onClick(data: any) {
     console.log("on click", this.categories2)
@@ -54,19 +62,26 @@ export class SellerComponent implements OnInit {
     console.log(this.categories2)
   }
 
+  sessionUserDetails: any;
   ngOnInit(): void {
-
+    const userDetails = localStorage.getItem('UserDetails');
+    if (undefined != userDetails && null != userDetails) {
+      this.sessionUserDetails = JSON.parse(userDetails);
+      if (this.sessionUserDetails.roles !== 'SELLER') {
+        window.location.href = '/home';
+      }
+    }
   }
 
 
   onDiscountChange(discount: any) {
-   if(this.billItems && this.billItems.length > 0){
-    this.billItems.forEach(item => {
-      item.discount = discount;
-      this.getTotalBillPerPRoduct(item);
-    });
+    if (this.billItems && this.billItems.length > 0) {
+      this.billItems.forEach(item => {
+        item.discount = discount;
+        this.getTotalBillPerPRoduct(item);
+      });
+    }
   }
-}
 
 
 
@@ -80,7 +95,9 @@ export class SellerComponent implements OnInit {
       this.productList.push(this.product);
 
       if (this.product.batchNumber !== null) {
+          this.isLoading = true;
         this.sellerService.addProduct(this.product).subscribe((data: any) => {
+  this.isLoading = false;
 
           if (data.errorMessage != null) {
             this.errorMessage = data.errorMessage;
@@ -120,12 +137,20 @@ export class SellerComponent implements OnInit {
       tap(() => {
         this.searching = true;
         this.expiryShow = false;
+          this.isLoading = true;
+
       }),
       switchMap((term) =>
-        this.sellerService.getSellerProduct(term).pipe(
-          tap((res) => { this.searchFailed = false }),
+        this.sellerService.getSellerProduct(term, this.sessionUserDetails.storeId).pipe(
+          tap((res) => {
+             this.searchFailed = false;
+               this.isLoading = false;
+
+            }),
           catchError(() => {
             this.searchFailed = true;
+              this.isLoading = false;
+
             return of([]);
           })),
       ),
@@ -149,12 +174,17 @@ export class SellerComponent implements OnInit {
       tap(() => {
         this.searching = true;
         this.expiryShow = false;
+        this.invoiceViewFlag = false;
+          this.isLoading = true;
       }),
       switchMap((term) =>
-        this.sellerService.getSellerProduct(term).pipe(
-          tap((res) => { this.searchFailed = false }),
+        this.sellerService.getSellerProduct(term, this.sessionUserDetails.storeId).pipe(
+          tap((res) => { this.searchFailed = false;
+              this.isLoading = false;
+           }),
           catchError(() => {
             this.searchFailed = true;
+              this.isLoading = false;
             return of([]);
           })),
       ),
@@ -265,29 +295,40 @@ export class SellerComponent implements OnInit {
   }
 
 
-// ...existing code...
-finalizeBill() {
-  this.billErrorMessage = '';
-  if (this.billItems.length === 0) {
-    this.billErrorMessage = 'No items in the bill to finalize!';
-    return;
-  }
-  this.sellerService.finalizeBill(this.billItems).subscribe({
-    next: (res: any) => {
-      if (res.errorMessage) {
-        this.billErrorMessage = res.errorMessage;
-      } else {
-        this.billSuccessMessage = res.response || 'Bill finalized successfully!';
-        this.billItems = [];
-        setTimeout(() => this.billSuccessMessage = '', 3000);
-      }
-    },
-    error: (err) => {
-      this.billErrorMessage = 'Failed to finalize bill!';
+  // ...existing code...
+  finalizeBill() {
+    this.billErrorMessage = '';
+    if (this.billItems.length === 0) {
+      this.billErrorMessage = 'No items in the bill to finalize!';
+      return;
     }
-  });
-}
-// ...existing code...
+    // Optionally, collect customer info from a form and add to billItems[0]
+    this.billItems[0].customerName = this.customerName;
+    this.billItems[0].customerMobile = this.customerMobile;
+
+    this.isLoading = true;
+
+    this.sellerService.finalizeBill(this.billItems).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        if (res.errorMessage) {
+          this.billErrorMessage = res.errorMessage;
+        } else {
+          // Show invoice preview
+          this.invoicePreview = res.response;
+          this.billSuccessMessage = 'Bill finalized successfully!';
+          this.billItems = [];
+          this.invoiceViewFlag = true;
+          setTimeout(() => this.billSuccessMessage = '', 3000);
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.billErrorMessage = 'Failed to finalize bill!';
+      }
+    });
+  }
+  // ...existing code...
 
   onQuantityChange(index: number) {
     // Optionally, add validation or update logic here if needed
@@ -330,28 +371,79 @@ finalizeBill() {
   }
 
   expiredProducts: any[] = [];
-expiredProductDate: string = '';
-expiredProductError: string = '';
-expiryShow: boolean = false;
-fetchExpiredProducts() {
-  this.expiredProductError = '';
-  if (!this.expiredProductDate) {
-    this.expiredProductError = 'Please select a date.';
-    return;
+  expiredProductDate: string = '';
+  expiredProductError: string = '';
+  expiryShow: boolean = false;
+  fetchExpiredProducts() {
+    this.expiredProductError = '';
+    if (!this.expiredProductDate) {
+      this.expiredProductError = 'Please select a date.';
+      return;
+    }
+    this.searchShow = false;
+      this.isLoading = true;
+
+    this.sellerService.getExpiredProducts(this.expiredProductDate).subscribe(
+      (res: any) => {
+
+          this.isLoading = false;
+        this.expiredProducts = res;
+        this.expiryShow = true;
+        if (this.expiredProducts.length === 0) {
+          this.expiredProductError = 'No expired products found before the selected date.';
+          this.expiryShow = false;
+        }
+
+      }), {
+      error: () => {
+        this.expiredProductError = 'Failed to fetch expired products.';
+          this.isLoading = false;}
+    };
   }
-  this.searchShow =false;
-  this.sellerService.getExpiredProducts(this.expiredProductDate).subscribe(
-    (res : any) => {
-      this.expiredProducts = res;
-       this.expiryShow = true;
-      if(this.expiredProducts.length === 0){
-        this.expiredProductError = 'No expired products found before the selected date.';
-        this.expiryShow = false;
-      }
+  // ...existing code...
+  printInvoice() {
+    const printContents = document.getElementById('invoiceContent')?.innerHTML;
+    if (!printContents) return;
+    const popupWin = window.open('', '_blank', 'width=800,height=900');
+    if (popupWin) {
+      popupWin.document.open();
+      popupWin.document.write(`
+      <html>
+        <head>
+          <title>Invoice</title>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        </head>
+        <body onload="window.print();window.close()">
+          ${printContents}
+        </body>
+      </html>
+    `);
+      popupWin.document.close();
+    }
+  }
+  // ...existing code...
 
-    }), {
-    error: () => this.expiredProductError = 'Failed to fetch expired products.'
-  };
-}
+  backToBilling() {
+    this.invoiceViewFlag = false;
+    this.invoicePreview = null;
+    this.billErrorMessage = '';
+    this.billSuccessMessage = '';
+    this.searchShow = false;
+    this.expiryShow = false;
+    this.selectedProduct = null;
+    this.selectedProductName = '';
+    this.sellQuantity = 1;
+    this.billItems = [];
+    this.discount = 0;
+    this.tempTotalAmount = 0;
+    this.tempTotalAmountPerProduct = 0;
+    this.customerName = '';
+    this.customerMobile = '';
+    this.customerAddress = '';
+    this.searchProductTemp = null;
+    this.successMessage = "";
+    this.errorMessage = "";
+    this.addAnotherbtn = false;
 
+  }
 }

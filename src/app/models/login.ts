@@ -23,6 +23,7 @@ export class Userdetails {
     accountStatus: string | undefined;
     storeName: String | undefined;
     address:string|undefined
+    storeId:number| undefined;
 
     constructor(){}
 }
@@ -46,7 +47,7 @@ export class SignUpRequest {
 	fullName: string | undefined;
 	gender: string | undefined;
 	roles: string | undefined;
-    password: string | undefined;	
+    password: string | undefined;
     storeId: number|undefined;
 
 	storeName: string | undefined;
