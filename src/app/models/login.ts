@@ -59,5 +59,6 @@ export class SignUpRequest {
 	country: string | undefined;
 	secretKey: string | undefined;
     accountStatus: string | undefined;
+    otp:string | undefined;
     constructor(){}
 }

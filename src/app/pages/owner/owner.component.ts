@@ -11,14 +11,19 @@ import { GlobalService } from 'src/app/services/global.service';
 export class OwnerComponent implements OnInit {
 
   secretKeyRes = new SecretKeyResponse();
-  constructor(private signUpService: GlobalService, private route: Router) { }
+  users: any[] = [];
+  selectedRole: string = '';
+  selectedUser: any = null;
+  constructor(private globalService: GlobalService, private route: Router) { }
 
   ngOnInit(): void {
+        this.fetchUsers();
+
   }
 
   generateKey(){
 
-    this.signUpService.generateKey().subscribe(data =>{
+    this.globalService.generateKey().subscribe(data =>{
 
       Object.assign(this.secretKeyRes, data);
 
@@ -26,6 +31,35 @@ export class OwnerComponent implements OnInit {
     })
 
 
+  }
+
+   fetchUsers() {
+    this.globalService.getAllUsers(this.selectedRole).subscribe((data: any) => {
+      this.users = data.response || [];
+    });
+  }
+
+  viewUser(user: any) {
+    this.selectedUser = user;
+    // Show Bootstrap modal
+    const modal = new (window as any).bootstrap.Modal(document.getElementById('userDetailModal'));
+    modal.show();
+  }
+
+  deactivateUser(user: any) {
+    if (confirm(`Are you sure you want to deactivate ${user.fullName}'s account?`)) {
+      this.globalService.accountAction(user.userId, "deactivate").subscribe(() => {
+        user.accountStatus = 'BLOCKED';
+      });
+    }
+  }
+
+    activateUser(user: any) {
+    if (confirm(`Are you sure you want to activate ${user.fullName}'s account?`)) {
+      this.globalService.accountAction(user.userId, "activate").subscribe(() => {
+        user.accountStatus = 'ACTIVE';
+      });
+    }
   }
 
 }

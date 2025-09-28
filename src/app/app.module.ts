@@ -16,6 +16,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { JsonPipe } from '@angular/common';
 import { FooterComponent } from './components/footer/footer.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,9 @@ import { FooterComponent } from './components/footer/footer.component';
     PublicComponent,
     SellerComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UnauthorizedComponent
+
 
   ],
   imports: [
@@ -36,12 +39,11 @@ import { FooterComponent } from './components/footer/footer.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    JsonPipe,
-    NgbTypeaheadModule
+    JsonPipe
   ],
   providers: [{
-    provide:HTTP_INTERCEPTORS, useClass: GlobalInterceptor,
-    multi:true
+    provide: HTTP_INTERCEPTORS, useClass: GlobalInterceptor,
+    multi: true
   }],
   bootstrap: [AppComponent]
 })

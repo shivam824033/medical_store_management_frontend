@@ -6,12 +6,14 @@ import { LoginComponent } from './components/login/login.component';
 import { OwnerComponent } from './pages/owner/owner.component';
 import { SellerComponent } from './pages/seller/seller.component';
 import { PublicComponent } from './pages/public/public.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path : "signup", component: SignupComponent},
-  {path : "login", component: LoginComponent}
+  {path : "login", component: LoginComponent},
+  {path : "unauthorized", component: UnauthorizedComponent}
   // {path : "owner", component: OwnerComponent},
   // {path : "seller", component: SellerComponent},
   // {path : "public", component: PublicComponent}

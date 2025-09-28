@@ -19,8 +19,8 @@ const httpOptions = {
 export class GlobalService {
 
 
-  baseUrl =  "http://stocklyte.ap-south-1.elasticbeanstalk.com"; //"http://localhost:5000";
-
+ // baseUrl =  "http://stocklyte.ap-south-1.elasticbeanstalk.com";
+  baseUrl = "http://localhost:5000";
 
   constructor(private http: HttpClient) { }
 
@@ -110,6 +110,25 @@ export class GlobalService {
   // ...existing code...
 getExpiredProducts(date: string) {
   return this.http.post(`${this.baseUrl}/api/seller/expiredProducts`, { date });
+}
+// ...existing code...
+  sendOtp(email: string) {
+    return this.http.get(`${this.baseUrl}/api/otp/send?email=${email}`);
+  }
+
+  verifyOtp(email: string, otp: string){
+    return this.http.get(`${this.baseUrl}/api/otp/verify?email=${email}&otp=${otp}`);
+  }
+
+  // ...existing code...
+getAllUsers(role: string) {
+  let url = `${this.baseUrl}/api/owner/users`;
+  if (role) url += `?role=${role}`;
+  return this.http.get(url);
+}
+
+accountAction(userId: number, accountStatus: string) {
+  return this.http.post(`${this.baseUrl}/api/owner/accountAction`, { userId, accountStatus });
 }
 // ...existing code...
 

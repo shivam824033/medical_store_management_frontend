@@ -10,7 +10,7 @@ import { GlobalService } from 'src/app/services/global.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  confirmPassword!:string;
+  confirmPassword!: string;
 
   ngOnInit(): void {
   }
@@ -20,7 +20,13 @@ export class SignupComponent implements OnInit {
   roles = ["SELLER", "PUBLIC"];
   genderList = ["Male", "Female", "Other"];
 
-  errorMessage:any;
+
+  email: string = '';
+  otp: string = '';
+  message: string = '';
+  otpSent: boolean = false;
+
+  errorMessage: any;
 
   constructor(private fb: UntypedFormBuilder, private signUpService: GlobalService, private route: Router) {
     this.signupForm = this.fb.group({
@@ -45,13 +51,21 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     console.log('registration Details:', this.signUpRequest);
+    this.errorMessage = '';
+    this.message = '';
     var fullName = this.signUpRequest.firstName + " " + this.signUpRequest.lastName;
-    this.signUpRequest.fullName=fullName;
+    this.signUpRequest.fullName = fullName;
 
-    if(this.signUpRequest.password !== this.confirmPassword){
-      this.errorMessage="Password and Confirm Password should be same";
+    if (this.signUpRequest.password !== this.confirmPassword) {
+      this.errorMessage = "Password and Confirm Password should be same";
       return;
     }
+
+    if (this.signUpRequest.otp === undefined || this.signUpRequest.otp === null || this.signUpRequest.otp === '') {
+      this.errorMessage = "Please enter OTP";
+      return;
+    }
+
     this.signUpService.signUp(this.signUpRequest).subscribe(data => {
 
       Object.assign(this.loginRes, data);
@@ -62,13 +76,64 @@ export class SignupComponent implements OnInit {
         localStorage.setItem("token", this.loginRes.accessToken);
         localStorage.setItem("UserDetails", JSON.stringify(this.loginRes.response))
         this.route.navigate(['']);
-       // window.location.reload();
+        // window.location.reload();
       } else {
         console.log("error" + this.loginRes.errorMessage);
-        this.errorMessage=this.loginRes.errorMessage;
+        this.errorMessage = this.loginRes.errorMessage;
       }
     })
   }
 
+
+  sendOtp() {
+    this.errorMessage = '';
+    this.message = '';
+    if (this.signUpRequest.email) {
+      this.signUpService.sendOtp(this.signUpRequest.email).subscribe((res: any) => {
+
+        if (res.errorMessage == null) {
+
+          this.message = res.response;
+          this.otpSent = true;
+
+        } else {
+          this.errorMessage = res.errorMessage;
+          this.otpSent = false;
+        }
+
+        setTimeout(() => {
+          this.otpSent = false;
+        }, 120000);
+
+      });
+    } else {
+      this.errorMessage = "Please enter a valid email address.";
+    }
+  }
+
+  otpResponse: any = {
+    message: '',
+    flag: false
+  };
+  verifyOtp() {
+    if (this.signUpRequest.email) {
+      this.signUpService.verifyOtp(this.signUpRequest.email, this.otp).subscribe((res: any) => {
+
+        if (res.errorMessage == null) {
+
+          this.otpResponse = res.response;
+          this.otpSent = false;
+
+        } else {
+          this.errorMessage = res.errorMessage;
+          this.otpSent = true;
+
+        }
+      });
+    } else {
+      this.errorMessage = "Please enter a valid email address.";
+    }
+
+  }
 
 }
