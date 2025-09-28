@@ -15,6 +15,7 @@ import { GlobalInterceptor } from './services/global.interceptor';
 import { HeaderComponent } from './components/header/header.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { JsonPipe } from '@angular/common';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { JsonPipe } from '@angular/common';
     OwnerComponent,
     PublicComponent,
     SellerComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
 
   ],
   imports: [

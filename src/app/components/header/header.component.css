@@ -9,8 +9,8 @@ body, .background-wrapper {
 /* Navbar */
 .navbar {
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border-radius: 0 0 12px 12px;
-    background: #f8f9faee !important;
+    /* border-radius: 0 0 12px 12px; */
+    background: #e1f8ed !important
 }
 
 .navbar-brand {

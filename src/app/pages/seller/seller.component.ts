@@ -302,6 +302,11 @@ export class SellerComponent implements OnInit {
       this.billErrorMessage = 'No items in the bill to finalize!';
       return;
     }
+
+    if (!this.customerName) {
+      this.billErrorMessage = 'Customer name are required!';
+      return;
+    }
     // Optionally, collect customer info from a form and add to billItems[0]
     this.billItems[0].customerName = this.customerName;
     this.billItems[0].customerMobile = this.customerMobile;

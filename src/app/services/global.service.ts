@@ -19,7 +19,7 @@ const httpOptions = {
 export class GlobalService {
 
 
-  baseUrl = "http://localhost:5000"; //"http://stocklyte.ap-south-1.elasticbeanstalk.com"
+  baseUrl =  "http://stocklyte.ap-south-1.elasticbeanstalk.com"; //"http://localhost:5000";
 
 
   constructor(private http: HttpClient) { }
